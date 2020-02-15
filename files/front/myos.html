@@ -39,42 +39,35 @@
 
                 <div class="row">
                     <div class="col">
-                       <input type="text" class="form-control" placeholder="Tiempo" disabled>
+                      <label>Tiempo</label>
+                       <input type="number" class="form-control" placeholder="40" disabled>
                     </div>
                     <div class="col">
-                      <select class="form-control custom-select" id="exampleFormControlSelect">
+                      <label>Paginas</label>
+                      <select class="form-control custom-select" id="tablaPaginacion">
                           <option>Ejecutar paginas</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
                       </select>
                     </div>
                     <div class="col">
-                      <select class="form-control custom-select" id="exampleFormControlSelect2">
-                          <option>SCV Quantum expirado</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
+                      <label>Interrupciones</label>
+                      <select class="form-control custom-select" id="tablaInterrupciones">
+                          <option id="0">SVC de solicitud de I/O</option>
+                          <option id="1">SVC de terminación normal</option>
+                          <option id="2">SVC de solitud de fecha</option>
+                          <option id="3">Error de programa</option>
+                          <option id="4">Externa de quantum expirado</option>
+                          <option id="5">Dispositivo de I/O</option>
                       </select>
                     </div>
                 </div>
             </nav>
         </div>
 
+        <!-- inicio Contenedor -->
         <div class="lime-container">
             <div class="lime-body">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="page-title">
 
-
-
-                            </div>
-                        </div>
-                    </div>
             <!-- inicio de Procesos -->
               <div class="card">
                 <div class="card-body">
@@ -126,9 +119,35 @@
                                   Ready
                               </div>
                               <div class="card-body">
-                                  <h5 class="card-title">Special title treatment</h5>
-                                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                  <a href="#" class="btn btn-info">Go somewhere</a>
+                                <table class="table" id="ready">
+
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
                               </div>
                               <div class="card-footer text-muted">
 
@@ -141,9 +160,27 @@
                                   Running
                               </div>
                               <div class="card-body">
-                                  <h5 class="card-title">Special title treatment</h5>
-                                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                  <a href="#" class="btn btn-info">Go somewhere</a>
+                                <table class="table" id="running">
+
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
                               </div>
                               <div class="card-footer text-muted">
 
@@ -156,9 +193,27 @@
                                   Blocked
                               </div>
                               <div class="card-body">
-                                  <h5 class="card-title">Special title treatment</h5>
-                                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                  <a href="#" class="btn btn-info">Go somewhere</a>
+                                <table class="table" id="blocked">
+
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
                               </div>
                               <div class="card-footer text-muted">
 
@@ -171,9 +226,27 @@
                                     Finished
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Special title treatment</h5>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    <a href="#" class="btn btn-info">Go somewhere</a>
+                                  <table class="table" id="finished">
+
+                                      <tbody>
+                                          <tr>
+                                              <th scope="row">1</th>
+
+                                          </tr>
+                                          <tr>
+                                              <th scope="row">2</th>
+
+                                          </tr>
+                                          <tr>
+                                              <th scope="row">3</th>
+
+                                          </tr>
+                                          <tr>
+                                              <th scope="row">3</th>
+
+                                          </tr>
+                                      </tbody>
+                                  </table>
                                 </div>
                                 <div class="card-footer text-muted">
 
@@ -209,19 +282,46 @@
                                 <br>
                                 <div class="row">
                                   <div class="col">
-                                    <p class="card-text">Páginas</p>
+                                    <p class="card-text">Tpo llegada</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Páginas">
+                                    <input type="text" class="form-control" placeholder="Tpo">
                                   </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                   <div class="col">
-                                    <p class="card-text">Ejec Total</p>
+                                    <p class="card-text">Cpu Asignado</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Ejec Total">
+                                    <input type="text" class="form-control" placeholder="Cpu Asignado">
+                                  </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                  <div class="col">
+                                    <p class="card-text">Envejecimiento</p>
+                                  </div>
+                                  <div class="col">
+                                    <input type="text" class="form-control" placeholder="Env">
+                                  </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                  <div class="col">
+                                    <p class="card-text">Cpu Restante</p>
+                                  </div>
+                                  <div class="col">
+                                    <input type="text" class="form-control" placeholder="Cpu Asignado">
+                                  </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                  <div class="col">
+                                    <p class="card-text">Quantum Restante</p>
+                                  </div>
+                                  <div class="col">
+                                    <input type="text" class="form-control" placeholder="Quantum">
                                   </div>
                                 </div>
                               </div>
@@ -242,11 +342,12 @@
                                 <div class="card-body">
                                   <div class="col">
                                     <select class="form-control custom-select" id="exampleFormControlSelect2">
-                                        <option>SCV Quantum expirado</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                        <option>FIFO</option>
+                                        <option>Round Robbin</option>
+                                        <option>Shortest Job First</option>
+                                        <option>Shortest Remaining Time</option>
+                                        <option>Highest Response</option>
+                                        <option>Multi Level Feedback Queues</option>
                                     </select>
                                   </div>
                                   <br>
