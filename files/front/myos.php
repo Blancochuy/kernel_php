@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<?php include('../backend/boton.php'); ?>
+<?php
+  require('../backend/functions.php');
+  $functions = new Functions();
+  $button = $functions->timeButton();
+?>
 <html lang="en">
     <head>
 
