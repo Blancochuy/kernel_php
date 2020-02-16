@@ -41,23 +41,23 @@
                 <div class="row">
                     <div class="col">
                       <label>Tiempo</label>
-                       <input type="number" class="form-control" value="40" id="time_value" disabled>
+                       <input type="number" class="form-control" value="40" name="time_value" disabled>
                     </div>
                     <div class="col">
                       <label>Paginas</label>
-                      <select class="form-control custom-select" id="tablaPaginacion">
+                      <select class="form-control custom-select" name="tablaPaginacion">
                           <option>Ejecutar paginas</option>
                       </select>
                     </div>
                     <div class="col">
                       <label>Interrupciones</label>
-                      <select class="form-control custom-select" id="tablaInterrupciones">
-                          <option id="0">SVC de solicitud de I/O</option>
-                          <option id="1">SVC de terminación normal</option>
-                          <option id="2">SVC de solitud de fecha</option>
-                          <option id="3">Error de programa</option>
-                          <option id="4">Externa de quantum expirado</option>
-                          <option id="5">Dispositivo de I/O</option>
+                      <select class="form-control custom-select" name="interruptionTable">
+                          <option value="0">SVC de solicitud de I/O</option>
+                          <option value="1">SVC de terminación normal</option>
+                          <option value="2">SVC de solitud de fecha</option>
+                          <option value="3">Error de programa</option>
+                          <option value="4">Externa de quantum expirado</option>
+                          <option value="5">Dispositivo de I/O</option>
                       </select>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                                   Ready
                               </div>
                               <div class="card-body">
-                                <table class="table" id="ready">
+                                <table class="table" name="ready">
 
                                     <tbody>
                                         <tr>
@@ -161,7 +161,7 @@
                                   Running
                               </div>
                               <div class="card-body">
-                                <table class="table" id="running">
+                                <table class="table" name="running">
 
                                     <tbody>
                                         <tr>
@@ -194,7 +194,7 @@
                                   Blocked
                               </div>
                               <div class="card-body">
-                                <table class="table" id="blocked">
+                                <table class="table" name="blocked">
 
                                     <tbody>
                                         <tr>
@@ -227,8 +227,7 @@
                                     Finished
                                 </div>
                                 <div class="card-body">
-                                  <table class="table" id="finished">
-
+                                  <table class="table" name="finished">
                                       <tbody>
                                           <tr>
                                               <th scope="row">1</th>
@@ -277,7 +276,7 @@
                                     <p class="card-text">Nombre</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Nombre">
+                                    <input type="text" class="form-control" placeholder="Nombre" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -286,7 +285,7 @@
                                     <p class="card-text">Tpo llegada</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Tpo">
+                                    <input type="text" class="form-control" placeholder="Tpo" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -295,7 +294,7 @@
                                     <p class="card-text">Cpu Asignado</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Cpu Asignado">
+                                    <input type="text" class="form-control" placeholder="Cpu Asignado" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -304,7 +303,7 @@
                                     <p class="card-text">Envejecimiento</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Env">
+                                    <input type="text" class="form-control" placeholder="Env" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -313,7 +312,7 @@
                                     <p class="card-text">Cpu Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Cpu Asignado">
+                                    <input type="text" class="form-control" placeholder="Cpu Asignado" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -322,7 +321,7 @@
                                     <p class="card-text">Quantum Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Quantum">
+                                    <input type="text" class="form-control" placeholder="Quantum" disabled>
                                   </div>
                                 </div>
                               </div>
@@ -342,7 +341,7 @@
                                 </div>
                                 <div class="card-body">
                                   <div class="col">
-                                    <select class="form-control custom-select" id="exampleFormControlSelect2">
+                                    <select class="form-control custom-select" id="schedulingTable">
                                         <option>FIFO</option>
                                         <option>Round Robbin</option>
                                         <option>Shortest Job First</option>
@@ -421,7 +420,7 @@
                                 </div>
                                 <div class="card-body">
                                   <div class="col">
-                                    <select class="form-control custom-select" id="exampleFormControlSelect2">
+                                    <select class="form-control custom-select" name="exampleFormControlSelect2">
                                         <option>NUR</option>
                                         <option>2</option>
                                         <option>3</option>

@@ -1,18 +1,3 @@
-<style>
 <?php
-include('assets/css/lime.css');
-include('assets/css/custom.css');
-include('assets/css/lime.min.css');
-include('assets/plugins/bootstrap/css/bootstrap.min.css');
-include('assets/plugins/font-awesome/css/all.min.css');
-?>
-</style>
-<script>
-  <?php
-  include('assets/js/lime.js');
-  include('assets/js/lime.min.js');
-   ?>
-</script>
-<?php
-include('files/front/myos.php');
+  echo'<a href="files/front/myos.php"> Presiona para comenzar </a>';
 ?>
