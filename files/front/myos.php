@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php include('../backend/boton.php'); ?>
 <html lang="en">
     <head>
 
@@ -41,7 +42,14 @@
                 <div class="row">
                     <div class="col">
                       <label>Tiempo</label>
-                       <input type="number" class="form-control" value="40" name="time_value" disabled>
+                      <form method='post'>
+                      <input class="form-control" name='add' type="submit" value='<?php echo $_SESSION['attnum']++ ?>'>
+                      </form>
+
+                      <form method='post'>
+                      <input class="btn btn-danger mt-2" name='reset' type="submit" value="Reset">
+                      </form>
+
                     </div>
                     <div class="col">
                       <label>Paginas</label>
