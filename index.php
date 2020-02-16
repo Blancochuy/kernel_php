@@ -1,12 +1,16 @@
 <?php
 
-  require('files/backend/functions.php');
-  $functions = new Functions();
-  if( isset($_GET['submit']) )
+    include('files/backend/functions.php');
+    $functions = new Functions();
+  if(isset($_POST['link']))
   {
-    $link = htmlentities($_GET['link']);
-    $button = $functions->getData($link);
+
+      $link = htmlentities($_GET['link']);
+      $link = "https://gist.githubusercontent.com/Blancochuy/1e8a575d1b399888ed0dfdd1711c2cc8/raw/762ba487488054b74de342a96008715b53aaaa4a/ejecuci%25C3%25B3n.txt";
+      $button = $functions->getData($link);
+
   }
+
 ?>
 <!-- Styles -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
@@ -20,9 +24,7 @@
 <link href="..\..\assets\themes\dark_mode.css" rel="stylesheet">
 <link href="..\..\assets\css\custom.css" rel="stylesheet">
 
-<form class="" action="" method="get" target="myvalue">
+<form class="" action="" method="post">
   <input class="form-control" type="text" name="link"></input>
-  <button class="btn btn-primary" type="submit"  href="">Submit</button>
+  <button class="btn btn-primary" type="submit">Submit</button>
 </form>
-
-<iframe name="myvalue"></iframe>
