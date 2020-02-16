@@ -23,7 +23,8 @@
 
         <!-- Theme Styles -->
         <link href="../../assets/css/lime.min.css" rel="stylesheet">
-        <link href="../../assets/css/custom.css" rel="stylesheet">
+        <link href="..\..\assets\themes\dark_mode.css" rel="stylesheet">
+        <link href="..\..\assets\css\custom.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,7 +33,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
+    <body class="no-loader">
 
         <div class="lime-header">
             <nav class="navbar navbar-expand-lg justify-content-end">
@@ -133,27 +134,6 @@
                                     <tbody>
                                         <tr>
                                             <th scope="row">1</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
                                         </tr>
                                     </tbody>
                                 </table>
