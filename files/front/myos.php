@@ -2,7 +2,15 @@
 <?php
   require('../backend/functions.php');
   $functions = new Functions();
+  //Funcion de tiempo
   $button = $functions->timeButton();
+  //Funcion para extraer los valores del archivo txt
+  if(isset($_GET['link']))
+  {
+      $link = htmlentities($_GET['link']);
+      $button = $functions->getData($link);
+  }
+
 ?>
 <html lang="en">
     <head>
