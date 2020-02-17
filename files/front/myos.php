@@ -21,10 +21,11 @@
   $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
   $process_data = $functions->getProcessData($num_procesos, $procesos);
 
+  var_dump($process_data[0][1]);
 ?>
 <html lang="en">
     <head>
-
+        <link rel=”shortcut icon” type=”image/png” href=”https://data.whicdn.com/images/48855885/original.png”/>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
