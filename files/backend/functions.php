@@ -1,4 +1,5 @@
 <?php
+require('objects.php');
 class Functions
 {
   public function getData($file_link)
@@ -41,5 +42,27 @@ class Functions
     $procArr = array_slice($myArr, 3);
     return array($valores, $procArr);
   }
+
+//Procesos
+
+  public function numeroPaginasProcesos($num_procesos, $procesos)
+  {
+    $paginas = [];
+    $datos_cpu_proc = 3;
+    $datos_memoria = 6;
+    $index_global = 0;
+
+    $cont = 0;
+
+    for ($i = 0; $i < $num_procesos; $i++) {
+        $index_global+=3;
+        array_push($paginas, $paginas = $procesos[$index_global]);
+        for ($j = 0; $j < $paginas; $j++) {
+            $index_global+=$datos_memoria;
+        }
+        $index_global++;
+    }
+    return $paginas;
+  }  
 }
  ?>

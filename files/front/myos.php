@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <?php
   require('../backend/functions.php');
-  require('../backend/objects.php');
   $functions = new Functions();
   //Funcion para extraer los valores del archivo txt
   if(isset($_GET['link']))
@@ -17,7 +16,8 @@
   //Funcion de tiempo
   $button = $functions->timeButton($valores);
 
-  $num_procesos = $valores[2]
+  $num_procesos = $valores[2];
+  $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
 ?>
 <html lang="en">
     <head>
