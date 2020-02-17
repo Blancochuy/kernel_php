@@ -13,13 +13,11 @@ class Functions
     $str = preg_replace('#\s+#',',',trim($stripped));
 
 
-    $myArray = explode(',', $str);
+    $myData = explode(',', $str);
 
-    $max_pag = $myArray[0]; //para validar
-    $tiempo_reloj = $myArray[1]; // iniciar tiempo en
-    $num_proc = $myArray[2]; // loop
 
-    return var_dump("Max paginas: ".$max_pag." Tiempo reloj: ".$tiempo_reloj." Num Procesos ".$num_proc);
+    return $myData;
+    //return var_dump("Max paginas: ".$max_pag." Tiempo reloj: ".$tiempo_reloj." Num Procesos ".$num_proc);
 
   }
 
@@ -27,13 +25,21 @@ class Functions
   {
     session_start();
     // Page was not reloaded via a button press
-    if (!isset($_POST['add'])) {
-        $_SESSION['attnum'] = 1; // Reset counter
-    }
-    if (!isset($_POST['reset'])) {
-      $reem = array("attnum" => 0);
-      $reiniciar = array_replace($reem);
-    }
+      if (!isset($_POST['add']))
+      {
+          $_SESSION['attnum'] = 1; // Reset counter
+      }
+      if (!isset($_POST['reset']))
+      {
+        $reem = array("attnum" => 0);
+        $reiniciar = array_replace($reem);
+      }
+  }
+  public function getVariabels($myArr)
+  {
+    $valores = array_slice($myArr, 0,3);
+    $procArr = array_slice($myArr, 3);
+    return array($valores, $procArr);
   }
 }
  ?>

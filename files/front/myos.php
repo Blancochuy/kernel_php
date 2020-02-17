@@ -8,8 +8,12 @@
   if(isset($_GET['link']))
   {
       $link = htmlentities($_GET['link']);
-      $button = $functions->getData($link);
+      $myData = $functions->getData($link);
   }
+  //funcion para partir el areglos
+  $arrss = $functions->getVariabels($myData);
+  $valores = $arrss[0];
+  $porcesos = $arrss[1];
 
 ?>
 <html lang="en">
