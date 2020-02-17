@@ -31,10 +31,6 @@
      https://gist.githubusercontent.com/Blancochuy/1e8a575d1b399888ed0dfdd1711c2cc8/raw/762ba487488054b74de342a96008715b53aaaa4a/ejecuci%25C3%25B3n.txt
 </pre>
 
-<head>
-  <link rel=”shortcut icon” type=”image/png” href=”https://data.whicdn.com/images/48855885/original.png”/>
-</head>
-
 <body class="no-loader">
 <form action="files/front/myos.php" method="get">
   <input class="form-control" type="text" name="link"></input>
