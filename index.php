@@ -32,7 +32,7 @@
 </pre>
 
 <head>
-  <link rel=”shortcut icon” type=”image/png” href=”https://data.whicdn.com/images/48855885/original.png”/>
+  <link rel=”shortcut icon” type=”image/png” href="img/favicon.ico"/>
 </head>
 
 <body class="no-loader">
