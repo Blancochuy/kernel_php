@@ -16,8 +16,11 @@
   //Funcion de tiempo
   $button = $functions->timeButton($valores);
 
+  //Datos de procesos
   $num_procesos = $valores[2];
   $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
+  $process_data = $functions->getProcessData($num_procesos, $procesos);
+
 ?>
 <html lang="en">
     <head>

@@ -43,11 +43,10 @@ class Functions
     return array($valores, $procArr);
   }
 
-//Procesos
-
+//  Procesos
   public function numeroPaginasProcesos($num_procesos, $procesos)
   {
-    $paginas = [];
+    $paginas_procesos = [];
     $datos_cpu_proc = 3;
     $datos_memoria = 6;
     $index_global = 0;
@@ -56,13 +55,34 @@ class Functions
 
     for ($i = 0; $i < $num_procesos; $i++) {
         $index_global+=3;
-        array_push($paginas, $paginas = $procesos[$index_global]);
+        $paginas = $procesos[$index_global];
+        array_push($paginas_procesos, $paginas);
         for ($j = 0; $j < $paginas; $j++) {
             $index_global+=$datos_memoria;
         }
         $index_global++;
     }
-    return $paginas;
-  }  
+    return $paginas_procesos;
+  }
+
+  public function getProcessData($num_procesos, $procesos)
+  {
+    $datos_cpu_proc = 3;
+    $datos_memoria = 6;
+    $index_global = 0;
+    $process_data = [];
+
+    for ($i = 0; $i < $num_procesos; $i++) {
+        array_push($process_data, array_slice($procesos, $index_global, 3));
+        //
+        $index_global+=3;
+        $paginas = $procesos[$index_global];
+        for ($j = 0; $j < $paginas; $j++) {
+            $index_global+=$datos_memoria;
+        }
+        $index_global++;
+    }
+    return $process_data;
+  }
 }
  ?>
