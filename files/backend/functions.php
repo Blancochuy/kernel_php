@@ -21,13 +21,13 @@ class Functions
 
   }
 
-  public function timeButton()
+  public function timeButton($val)
   {
     session_start();
     // Page was not reloaded via a button press
       if (!isset($_POST['add']))
       {
-          $_SESSION['attnum'] = 1; // Reset counter
+          $_SESSION['attnum'] = $val[1]; // Reset counter
       }
       if (!isset($_POST['reset']))
       {

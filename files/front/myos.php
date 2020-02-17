@@ -2,8 +2,6 @@
 <?php
   require('../backend/functions.php');
   $functions = new Functions();
-  //Funcion de tiempo
-  $button = $functions->timeButton();
   //Funcion para extraer los valores del archivo txt
   if(isset($_GET['link']))
   {
@@ -14,6 +12,9 @@
   $arrss = $functions->getVariabels($myData);
   $valores = $arrss[0];
   $porcesos = $arrss[1];
+
+  //Funcion de tiempo
+  $button = $functions->timeButton($valores);
 
 ?>
 <html lang="en">
