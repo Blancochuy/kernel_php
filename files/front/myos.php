@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
   require('../backend/functions.php');
+  require('../backend/objects.php');
   $functions = new Functions();
   //Funcion para extraer los valores del archivo txt
   if(isset($_GET['link']))
@@ -11,11 +12,12 @@
   //funcion para partir el areglos
   $arrss = $functions->getVariabels($myData);
   $valores = $arrss[0];
-  $porcesos = $arrss[1];
+  $procesos = $arrss[1];
 
   //Funcion de tiempo
   $button = $functions->timeButton($valores);
 
+  $num_procesos = $valores[2]
 ?>
 <html lang="en">
     <head>
