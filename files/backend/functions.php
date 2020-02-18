@@ -84,5 +84,110 @@ class Functions
     }
     return $process_data;
   }
+
+  public function createProcessList($process_data)
+  {
+    //parametros de objeto Process
+    $arrival;
+    $estimated_time;
+    $status;
+    //arreglo de objetos Process
+    $arr_process = [];
+
+    $num_procesos = count($process_data);
+    for ($i=0; $i < $num_procesos; $i++) {
+      for ($j=0; $j < 3; $j++) {
+        switch ($j) {
+            case 0:
+                $arrival = $process_data[$i][$j];
+                break;
+            case 1:
+                $estimated_time = $process_data[$i][$j];
+                break;
+            case 2:
+                $status = $process_data[$i][$j];
+                break;
+        }
+      }
+      $process = new Process($i, $arrival, $estimated_time, $status);
+      array_push($arr_process, $process);
+    }
+    return $arr_process;
+  }
+
+  public function createInterruption($value) {
+    $interruption = new Interruption(" ");
+
+    switch ($value) {
+      case 0:
+        $interruption->tipo = "SVC de solicitud de I/O";
+        break;
+      case 1:
+        $interruption->tipo = "SVC de terminación normal";
+        break;
+      case 2:
+        $interruption->tipo = "SVC de solitud de fecha";
+        break;
+      case 3:
+        $interruption->tipo = "Error de programa";
+        break;
+      case 4:
+        $interruption->tipo = "Externa de quantum expirado";
+        break;
+      case 5:
+        $interruption->tipo = "Dispositivo de I/O";
+        break;
+    }
+    return $interruption;
+  }
+
+  public function createStatusProcess($order, $interruption, $obj_process_arr)
+  {
+    $lista_procesos_status = new StatusProcess([],[],[],$order,$interruption);
+
+    foreach ($obj_process_arr as $key => $process) {
+      switch ($process->status) {
+        case '1':
+          array_push($lista_procesos_status->running, $process);
+          break;
+        case '2':
+          array_push($lista_procesos_status->blocked, $process);
+          break;
+        case '3':
+          array_push($lista_procesos_status->ready, $process);
+          break;
+      }
+    }
+    return $lista_procesos_status;
+  }
 }
- ?>
+  //PRUEBAS FUNCIONES
+  /*
+    $functions = new Functions();
+    //Funcion para extraer los valores del archivo txt
+
+    $myData = $functions->getData("https://gist.githubusercontent.com/Blancochuy/1e8a575d1b399888ed0dfdd1711c2cc8/raw/762ba487488054b74de342a96008715b53aaaa4a/ejecuci%25C3%25B3n.txt");
+
+    //funcion para partir el areglos
+    $arrss = $functions->getVariabels($myData);
+    $valores = $arrss[0];
+    $procesos = $arrss[1];
+
+    //Funcion de tiempo
+    $button = $functions->timeButton($valores);
+
+    //Datos de procesos
+    $num_procesos = $valores[2];
+    //Numero de paginas
+    $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
+    //Atributos de todos los procesos
+    $process_data = $functions->getProcessData($num_procesos, $procesos);
+    //crear Interrupcion
+    $interruption = $functions->createInterruption("0");
+    //crear lista de procesos
+    $obj_process_arr = $functions->createProcessList($process_data);
+    //lista status procesos
+    $lista_procesos_status = $functions->createStatusProcess("1", $interruption, $obj_process_arr);
+    var_dump($lista_procesos_status);
+  */
+?>

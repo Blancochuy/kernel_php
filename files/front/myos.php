@@ -18,10 +18,11 @@
 
   //Datos de procesos
   $num_procesos = $valores[2];
+  //Numero de paginas
   $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
+  //Atributos de todos los procesos
   $process_data = $functions->getProcessData($num_procesos, $procesos);
-
-  var_dump($process_data[0][1]);
+  $obj_process_arr = $functions->createProcess($process_data);
 ?>
 <html lang="en">
     <head>
@@ -352,12 +353,12 @@
                                 <div class="card-body">
                                   <div class="col">
                                     <select class="form-control custom-select" id="schedulingTable">
-                                        <option>FIFO</option>
-                                        <option>Round Robbin</option>
-                                        <option>Shortest Job First</option>
-                                        <option>Shortest Remaining Time</option>
-                                        <option>Highest Response</option>
-                                        <option>Multi Level Feedback Queues</option>
+                                        <option value="0">FIFO</option>
+                                        <option value="1">Round Robbin</option>
+                                        <option value="2">Shortest Job First</option>
+                                        <option value="3">Shortest Remaining Time</option>
+                                        <option value="4">Highest Response</option>
+                                        <option value="5">Multi Level Feedback Queues</option>
                                     </select>
                                   </div>
                                   <br>
