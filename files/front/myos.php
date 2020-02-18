@@ -118,7 +118,6 @@
                             <?php if ($_POST['interruptionTable'] == "5") { echo "selected";} ?>>Dispositivo de I/O</option>
                         </select>
                       </div>
-                    </form>
                 </div>
             </nav>
         </div>
@@ -379,15 +378,24 @@
                                 </div>
                                 <div class="card-body">
                                   <div class="col">
-                                    <select class="form-control custom-select" id="schedulingTable">
-                                        <option value="0">FIFO</option>
-                                        <option value="1">Round Robbin</option>
-                                        <option value="2">Shortest Job First</option>
-                                        <option value="3">Shortest Remaining Time</option>
-                                        <option value="4">Highest Response</option>
-                                        <option value="5">Multi Level Feedback Queues</option>
-                                    </select>
-                                  </div>
+                                    <div class="col">
+                                        <select class="form-control custom-select" name="schedulingTable">
+                                            <option value="0"
+                                            <?php if ($_POST['schedulingTable'] == "0") { echo "selected";}?> >FIFO</option>
+                                            <option value="1"
+                                            <?php if ($_POST['schedulingTable'] == "1") { echo "selected";}?> >Round Robbin</option>
+                                            <option value="2"
+                                            <?php if ($_POST['schedulingTable'] == "2") { echo "selected";}?> >Shortest Job First</option>
+                                            <option value="3"
+                                            <?php if ($_POST['schedulingTable'] == "3") { echo "selected";}?> >Shortest Remaining Time</option>
+                                            <option value="4"
+                                            <?php if ($_POST['schedulingTable'] == "4") { echo "selected";}?> >Highest Response</option>
+                                            <option value="5"
+                                            <?php if ($_POST['schedulingTable'] == "5") { echo "selected";}?> >Multi Level Feedback Queues</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </form>
                                   <br>
                                   <div class="row">
                                     <div class="col">
