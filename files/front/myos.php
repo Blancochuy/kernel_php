@@ -22,7 +22,7 @@
   $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
   //Atributos de todos los procesos
   $process_data = $functions->getProcessData($num_procesos, $procesos);
-  $obj_process_arr = $functions->createProcess($process_data);
+  $obj_process_arr = $functions->createProcessList($process_data);
 ?>
 <html lang="en">
     <head>
