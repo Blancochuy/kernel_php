@@ -27,6 +27,13 @@
   //Interrupcion
   $interruption = $functions->createInterruption($_POST['interruptionTable']);
   var_dump($interruption);
+
+  session_start();
+  if(isset($_POST['theme']))
+  {
+  $_SESSION['theme'] = $_POST['theme'];
+  }
+  var_dump($_SESSION['theme']);
 ?>
 <html lang="en">
     <head>
@@ -51,11 +58,11 @@
         <!-- Theme Styles -->
         <link href="../../assets/css/lime.min.css" rel="stylesheet">
         <form class="ml-4 mt-4"method="post">
-            <input class="custom-radio mt-2" type="radio" name="theme" value="light"<?php if ($_POST['theme'] == "light") { echo "checked";} ?>>LIGHT</input>
-            <input class="custom-radio mt-2" type="radio" name="theme" value="dark"<?php if ($_POST['theme'] == "dark") { echo "checked";} ?>>DARK</input>
+            <input class="custom-radio mt-2" type="radio" name="theme" value="light"<?php if ($_SESSION['theme'] == "light") { echo "checked";} ?>>LIGHT</input>
+            <input class="custom-radio mt-2" type="radio" name="theme" value="dark"<?php if ($_SESSION['theme'] == "dark") { echo "checked";} ?>>DARK</input>
           <?php
-          $theme = $_POST['theme'];
-          if ($theme == "light") {
+
+          if ($_SESSION['theme'] == "light") {
           }
           else{
             echo '<link href="..\..\assets\themes\dark_mode.css" rel="stylesheet">';
