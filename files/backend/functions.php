@@ -36,6 +36,7 @@ class Functions
         $reiniciar = array_replace($reem);
       }
   }
+  
   public function getVariabels($myArr)
   {
     $valores = array_slice($myArr, 0,3);

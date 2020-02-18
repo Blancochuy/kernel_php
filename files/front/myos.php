@@ -22,7 +22,11 @@
   $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
   //Atributos de todos los procesos
   $process_data = $functions->getProcessData($num_procesos, $procesos);
+  //Arreglo de todos los procesos
   $obj_process_arr = $functions->createProcessList($process_data);
+  //Interrupcion
+  $interruption = $functions->createInterruption($_POST['interruptionTable']);
+  var_dump($interruption);
 ?>
 <html lang="en">
     <head>
@@ -46,7 +50,21 @@
 
         <!-- Theme Styles -->
         <link href="../../assets/css/lime.min.css" rel="stylesheet">
-        <link href="..\..\assets\themes\dark_mode.css" rel="stylesheet">
+        <form class="ml-4 mt-4"method="post">
+            <input class="custom-radio mt-2" type="radio" name="theme" value="light"<?php if ($_POST['theme'] == "light") { echo "checked";} ?>>LIGHT</input>
+            <input class="custom-radio mt-2" type="radio" name="theme" value="dark"<?php if ($_POST['theme'] == "dark") { echo "checked";} ?>>DARK</input>
+          <?php
+          $theme = $_POST['theme'];
+          if ($theme == "light") {
+          }
+          else{
+            echo '<link href="..\..\assets\themes\dark_mode.css" rel="stylesheet">';
+          }
+           ?>
+           <div>
+             <input class="btn btn-secondary" type="submit" value="change theme">
+           </div>
+        </form>
         <link href="..\..\assets\css\custom.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -68,12 +86,7 @@
                       <label>Tiempo</label>
                       <form method='post'>
                       <input class="form-control" name='add' type="submit" value='<?php echo $_SESSION['attnum']++ ?>'>
-                      </form>
-
-                      <form method='post'>
-                      <input class="btn btn-danger mt-2" name='reset' type="submit" value="Reset">
-                      </form>
-
+                      <input class="btn btn-success mt-2" name='reset' type="submit" value="Start">
                     </div>
                     <div class="col">
                       <label>Paginas</label>
@@ -81,17 +94,24 @@
                           <option>Ejecutar paginas</option>
                       </select>
                     </div>
-                    <div class="col">
-                      <label>Interrupciones</label>
-                      <select class="form-control custom-select" name="interruptionTable">
-                          <option value="0">SVC de solicitud de I/O</option>
-                          <option value="1">SVC de terminación normal</option>
-                          <option value="2">SVC de solitud de fecha</option>
-                          <option value="3">Error de programa</option>
-                          <option value="4">Externa de quantum expirado</option>
-                          <option value="5">Dispositivo de I/O</option>
-                      </select>
-                    </div>
+                      <div class="col">
+                        <label>Interrupciones</label>
+                        <select class="form-control custom-select" name='interruptionTable'>
+                            <option value="0"
+                            <?php if ($_POST['interruptionTable'] == "0") { echo "selected";} ?>>SVC de solicitud de I/O</option>
+                            <option value="1"
+                            <?php if ($_POST['interruptionTable'] == "1") { echo "selected";} ?>>SVC de terminación normal</option>
+                            <option value="2"
+                            <?php if ($_POST['interruptionTable'] == "2") { echo "selected";} ?>>SVC de solitud de fecha</option>
+                            <option value="3"
+                            <?php if ($_POST['interruptionTable'] == "3") { echo "selected";} ?>>Error de programa</option>
+                            <option value="4"
+                            <?php if ($_POST['interruptionTable'] == "4") { echo "selected";} ?>>Externa de quantum expirado</option>
+                            <option value="5"
+                            <?php if ($_POST['interruptionTable'] == "5") { echo "selected";} ?>>Dispositivo de I/O</option>
+                        </select>
+                      </div>
+                    </form>
                 </div>
             </nav>
         </div>
