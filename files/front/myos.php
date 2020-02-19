@@ -30,7 +30,8 @@
   $order = $functions->createOrder($_POST['schedulingTable']);
   //Arreglos de procesos por status
   $lista_procesos_status = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
-  $_POST['quantumSize'];
+  //Tamaño de Quantum
+  $quantum = $_POST['quantumSize'];
 
   session_start();
   if(isset($_POST['theme']))
