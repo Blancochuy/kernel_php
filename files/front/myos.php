@@ -26,14 +26,17 @@
   $obj_process_arr = $functions->createProcessList($process_data);
   //Interrupcion
   $interruption = $functions->createInterruption($_POST['interruptionTable']);
-  var_dump($interruption);
+  //Order
+  $order = $functions->createOrder($_POST['schedulingTable']);
+  //Arreglos de procesos por status
+  $lista_procesos_status = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
+  var_dump($order);
 
   session_start();
   if(isset($_POST['theme']))
   {
   $_SESSION['theme'] = $_POST['theme'];
   }
-  var_dump($_SESSION['theme']);
 ?>
 <html lang="en">
     <head>

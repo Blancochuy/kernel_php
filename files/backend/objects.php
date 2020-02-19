@@ -34,4 +34,12 @@ class Interruption
     $this->tipo = $tipo;
   }
 }
+
+class Order
+{
+  function __construct($tipo)
+  {
+    $this->tipo = $tipo;
+  }
+}
  ?>

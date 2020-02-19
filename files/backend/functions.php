@@ -36,7 +36,7 @@ class Functions
         $reiniciar = array_replace($reem);
       }
   }
-  
+
   public function getVariabels($myArr)
   {
     $valores = array_slice($myArr, 0,3);
@@ -140,6 +140,31 @@ class Functions
         break;
     }
     return $interruption;
+  }
+
+  public function createOrder($value) {
+    $order = new Order(" ");
+    switch ($value) {
+      case 0:
+        $order->tipo = "FIFO";
+        break;
+      case 1:
+        $order->tipo = "Round Robbin";
+        break;
+      case 2:
+        $order->tipo = "Shortest Job First";
+        break;
+      case 3:
+        $order->tipo = "Shortest Remaining Time";
+        break;
+      case 4:
+        $order->tipo = "Highest Response";
+        break;
+      case 5:
+        $order->tipo = "Multi Level Feedback Queues";
+        break;
+    }
+    return $order;
   }
 
   public function createStatusProcess($order, $interruption, $obj_process_arr)
