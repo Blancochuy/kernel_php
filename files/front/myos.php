@@ -30,7 +30,7 @@
   $order = $functions->createOrder($_POST['schedulingTable']);
   //Arreglos de procesos por status
   $lista_procesos_status = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
-  var_dump($order);
+  $_POST['quantumSize'];
 
   session_start();
   if(isset($_POST['theme']))
@@ -208,18 +208,6 @@
                                             <th scope="row">1</th>
 
                                         </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
                                     </tbody>
                                 </table>
                               </div>
@@ -241,18 +229,6 @@
                                             <th scope="row">1</th>
 
                                         </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-
-                                        </tr>
                                     </tbody>
                                 </table>
                               </div>
@@ -271,18 +247,6 @@
                                       <tbody>
                                           <tr>
                                               <th scope="row">1</th>
-
-                                          </tr>
-                                          <tr>
-                                              <th scope="row">2</th>
-
-                                          </tr>
-                                          <tr>
-                                              <th scope="row">3</th>
-
-                                          </tr>
-                                          <tr>
-                                              <th scope="row">3</th>
 
                                           </tr>
                                       </tbody>
@@ -361,7 +325,7 @@
                                     <p class="card-text">Quantum Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Quantum" disabled>
+                                    <input type="text" class="form-control" placeholder="Quantum" name="quantumLeft" disabled value = <?php  ?> >
                                   </div>
                                 </div>
                               </div>
@@ -398,19 +362,18 @@
                                         </select>
                                       </div>
                                     </div>
-                                  </form>
                                   <br>
                                   <div class="row">
                                     <div class="col">
                                       <p class="card-text">Tam Quantum</p>
                                     </div>
                                     <div class="col">
-                                      <input type="text" class="form-control" placeholder="Tam">
+                                      <input type="text" class="form-control" name="quantumSize" value= <?php echo $_POST['quantumSize']; ?>>
                                     </div>
                                   </div>
                                 </div>
                                 <div class="card-footer text-muted">
-
+                              </form>
                                 </div>
                             </div>
                         </div>

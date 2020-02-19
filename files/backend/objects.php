@@ -163,8 +163,3 @@ class Order
   }
 }
  ?>
-
- Burst time is the amount of time required by a process for executing on CPU.
-It is also called as execution time or running time.
-Burst time of a process can not be known in advance before executing the process.
-It can be known only after the process has executed.
