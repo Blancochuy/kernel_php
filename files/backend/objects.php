@@ -162,4 +162,8 @@ class Order
     $this->tipo = $tipo;
   }
 }
+//PRUEBAS OBJETOS
+/*
+
+*/
  ?>

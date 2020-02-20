@@ -26,12 +26,14 @@
   $obj_process_arr = $functions->createProcessList($process_data);
   //Interrupcion
   $interruption = $functions->createInterruption($_POST['interruptionTable']);
-  //Order
-  $order = $functions->createOrder($_POST['schedulingTable']);
   //Arreglos de procesos por status
   $lista_procesos_status = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
+  //CPU
+  //Order
+  $order = $functions->createOrder($_POST['schedulingTable']);
   //Tamaño de Quantum
   $quantum = $_POST['quantumSize'];
+  var_dump();
 
   session_start();
   if(isset($_POST['theme']))
@@ -183,11 +185,16 @@
                               </div>
                               <div class="card-body">
                                 <table class="table" name="ready">
-
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                        </tr>
+                                      <tr>
+                                        <?php
+                                        foreach ($lista_procesos_status->ready as $process) {
+                                          if ($process) {
+                                          echo '<tr>';
+                                          echo '<th>'.$process->nombre.'</th>';
+                                          echo "</tr>";
+                                        }
+                                      } ?>
                                     </tbody>
                                 </table>
                               </div>
@@ -203,12 +210,16 @@
                               </div>
                               <div class="card-body">
                                 <table class="table" name="running">
-
                                     <tbody>
                                         <tr>
-                                            <th scope="row">1</th>
-
-                                        </tr>
+                                          <?php
+                                          foreach ($lista_procesos_status->running as $process) {
+                                            if ($process) {
+                                            echo '<tr>';
+                                            echo '<th>'.$process->nombre.'</th>';
+                                            echo "</tr>";
+                                          }
+                                        } ?>
                                     </tbody>
                                 </table>
                               </div>
@@ -224,12 +235,15 @@
                               </div>
                               <div class="card-body">
                                 <table class="table" name="blocked">
-
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-
-                                        </tr>
+                                      <?php
+                                            foreach ($lista_procesos_status->blocked as $process) {
+                                              if ($process) {
+                                                echo '<tr>';
+                                                echo '<th>'.$process->nombre.'</th>';
+                                                echo "</tr>";
+                                              }
+                                            } ?>
                                     </tbody>
                                 </table>
                               </div>
@@ -246,10 +260,15 @@
                                 <div class="card-body">
                                   <table class="table" name="finished">
                                       <tbody>
-                                          <tr>
-                                              <th scope="row">1</th>
-
-                                          </tr>
+                                        <tr>
+                                          <?php
+                                          foreach ($lista_procesos_status->finished as $process) {
+                                            if ($process) {
+                                            echo '<tr>';
+                                            echo '<th>'.$process->nombre.'</th>';
+                                            echo "</tr>";
+                                          }
+                                        } ?>
                                       </tbody>
                                   </table>
                                 </div>
