@@ -9,17 +9,11 @@ class Functions
       https://gist.githubusercontent.com/Blancochuy/1e8a575d1b399888ed0dfdd1711c2cc8/raw/762ba487488054b74de342a96008715b53aaaa4a/ejecuci%25C3%25B3n.txt
     */
     $página_inicio = file_get_contents($file_link);
-
     $stripped = str_replace(' ', '', $página_inicio);
     $str = preg_replace('#\s+#',',',trim($stripped));
-
-
     $myData = explode(',', $str);
-
-
     return $myData;
     //return var_dump("Max paginas: ".$max_pag." Tiempo reloj: ".$tiempo_reloj." Num Procesos ".$num_proc);
-
   }
 
   public function timeButton($val)
@@ -116,6 +110,7 @@ class Functions
     return $arr_process;
   }
 
+  //  Interruptions
   public function createInterruption($value) {
     $interruption = new Interruption(" ");
 
@@ -185,6 +180,11 @@ class Functions
       }
     }
     return $lista_procesos_status;
+  }
+
+  public function createCpu($running_process, $order, $quantum, $cpu_time)
+  {
+    return new Cpu($running_process, $order, $quantum, $cpu_time);
   }
 }
   //PRUEBAS FUNCIONES

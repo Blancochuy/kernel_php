@@ -20,20 +20,25 @@
   $num_procesos = $valores[2];
   //Numero de paginas
   $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
-  //Atributos de todos los procesos
+  //PROCESOS
   $process_data = $functions->getProcessData($num_procesos, $procesos);
   //Arreglo de todos los procesos
   $obj_process_arr = $functions->createProcessList($process_data);
-  //Interrupcion
+  //INTERRUPCION
   $interruption = $functions->createInterruption($_POST['interruptionTable']);
   //Arreglos de procesos por status
   $lista_procesos_status = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
-  //CPU
+  //Proceso corriendo actualmente
+  $running_process = $lista_procesos_status->running[0];
   //Order
   $order = $functions->createOrder($_POST['schedulingTable']);
   //Tamaño de Quantum
   $quantum = $_POST['quantumSize'];
-  var_dump();
+  //Tiempo actual
+  $actual_time = $_SESSION['attnum'];
+  //CPU
+  $cpu = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
+  var_dump($cpu);
 
   session_start();
   if(isset($_POST['theme']))
@@ -191,7 +196,7 @@
                                         foreach ($lista_procesos_status->ready as $process) {
                                           if ($process) {
                                           echo '<tr>';
-                                          echo '<th>'.$process->nombre.'</th>';
+                                          echo '<th>'.$process->name.'</th>';
                                           echo "</tr>";
                                         }
                                       } ?>
@@ -216,7 +221,7 @@
                                           foreach ($lista_procesos_status->running as $process) {
                                             if ($process) {
                                             echo '<tr>';
-                                            echo '<th>'.$process->nombre.'</th>';
+                                            echo '<th>'.$process->name.'</th>';
                                             echo "</tr>";
                                           }
                                         } ?>
@@ -240,7 +245,7 @@
                                             foreach ($lista_procesos_status->blocked as $process) {
                                               if ($process) {
                                                 echo '<tr>';
-                                                echo '<th>'.$process->nombre.'</th>';
+                                                echo '<th>'.$process->name.'</th>';
                                                 echo "</tr>";
                                               }
                                             } ?>
@@ -265,7 +270,7 @@
                                           foreach ($lista_procesos_status->finished as $process) {
                                             if ($process) {
                                             echo '<tr>';
-                                            echo '<th>'.$process->nombre.'</th>';
+                                            echo '<th>'.$process->name.'</th>';
                                             echo "</tr>";
                                           }
                                         } ?>
@@ -300,7 +305,7 @@
                                     <p class="card-text">Nombre</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Nombre" disabled>
+                                    <input type="text" class="form-control" value="Nombre" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -309,7 +314,7 @@
                                     <p class="card-text">Tpo llegada</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Tpo" disabled>
+                                    <input type="text" class="form-control" value="Tpo" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -318,7 +323,7 @@
                                     <p class="card-text">Cpu Asignado</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Cpu Asignado" disabled>
+                                    <input type="text" class="form-control" value="Cpu Asignado" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -327,7 +332,7 @@
                                     <p class="card-text">Envejecimiento</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Env" disabled>
+                                    <input type="text" class="form-control" value="Env" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -336,7 +341,7 @@
                                     <p class="card-text">Cpu Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Cpu Asignado" disabled>
+                                    <input type="text" class="form-control" value="Cpu Asignado" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -345,7 +350,7 @@
                                     <p class="card-text">Quantum Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Quantum" name="quantumLeft" disabled value = <?php  ?> >
+                                    <input type="text" class="form-control" value="Quantum" name="quantumLeft" disabled value = <?php  ?> >
                                   </div>
                                 </div>
                               </div>
@@ -366,18 +371,18 @@
                                 <div class="card-body">
                                   <div class="col">
                                     <div class="col">
-                                        <select class="form-control custom-select" name="schedulingTable">
-                                            <option value="0"
+                                        <select class="form-control custom-select" name="schedulingTable" onchange="assignQuantum()">
+                                            <option value="0" id="schedule0"
                                             <?php if ($_POST['schedulingTable'] == "0") { echo "selected";}?> >FIFO</option>
-                                            <option value="1"
+                                            <option value="1" id="schedule1"
                                             <?php if ($_POST['schedulingTable'] == "1") { echo "selected";}?> >Round Robbin</option>
-                                            <option value="2"
+                                            <option value="2" id="schedule2"
                                             <?php if ($_POST['schedulingTable'] == "2") { echo "selected";}?> >Shortest Job First</option>
-                                            <option value="3"
+                                            <option value="3" id="schedule3"
                                             <?php if ($_POST['schedulingTable'] == "3") { echo "selected";}?> >Shortest Remaining Time</option>
-                                            <option value="4"
+                                            <option value="4" id="schedule4"
                                             <?php if ($_POST['schedulingTable'] == "4") { echo "selected";}?> >Highest Response</option>
-                                            <option value="5"
+                                            <option value="5" id="schedule5"
                                             <?php if ($_POST['schedulingTable'] == "5") { echo "selected";}?> >Multi Level Feedback Queues</option>
                                         </select>
                                       </div>
@@ -388,7 +393,7 @@
                                       <p class="card-text">Tam Quantum</p>
                                     </div>
                                     <div class="col">
-                                      <input type="text" class="form-control" name="quantumSize" value= <?php echo $_POST['quantumSize']; ?>>
+                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo $_POST['quantumSize']; ?>">
                                     </div>
                                   </div>
                                 </div>

@@ -138,12 +138,14 @@ class StatusProcess
 class Process
 {
   //datos CPU proc1: llegada, tiempo total estimado, estado (1-running, 2-blocked, 3-ready)
-  function __construct($nombre, $arrival, $estimated_time, $status)
+  function __construct($name, $arrival, $estimated_time, $status)
   {
-    $this->nombre = $nombre;
+    $this->name = $name;
     $this->arrival = $arrival;
     $this->estimated_time = $estimated_time;
     $this->status = $status;
+    $this->remaining_cpu = "";
+    $this->aging = 0;
   }
 }
 
@@ -160,6 +162,27 @@ class Order
   function __construct($tipo)
   {
     $this->tipo = $tipo;
+  }
+}
+
+class Cpu
+{
+  function __construct($running_process, $order, $quantum, $actual_time)
+  {
+    $this->running_process = $running_process;
+    $this->scheduling_order = $order;
+    $this->quantum = $quantum;
+    $this->actual_time = $actual_time;
+  }
+
+  function calculateRemainingCPU()
+  {
+
+  }
+
+  function calculateAging()
+  {
+
   }
 }
 //PRUEBAS OBJETOS
