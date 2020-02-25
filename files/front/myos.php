@@ -8,42 +8,51 @@
       $link = htmlentities($_GET['link']);
       $myData = $functions->getData($link);
   }
-  //funcion para partir el areglos
-  $arrss = $functions->getVariabels($myData);
-  $valores = $arrss[0];
-  $procesos = $arrss[1];
+  if(isset($_POST['start']))
+  {
+    //funcion para partir el areglos
+    $arrss = $functions->getVariabels($myData);
+    $valores = $arrss[0];
+    $procesos = $arrss[1];
 
-  //Funcion de tiempo
-  $button = $functions->timeButton($valores);
+    //Funcion de tiempo
+    $button = $functions->timeButton($valores);
 
-  //Datos de procesos
-  $num_procesos = $valores[2];
-  //Numero de paginas
-  $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
-  //PROCESOS
-  $process_data = $functions->getProcessData($num_procesos, $procesos);
-  //Arreglo de todos los procesos
-  $obj_process_arr = $functions->createProcessList($process_data);
-  //INTERRUPCION
-  $interruption = $functions->createInterruption($_POST['interruptionTable']);
-  //Arreglos de procesos por status
-  $lista_procesos_status = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
-  //Proceso corriendo actualmente
-  $running_process = $lista_procesos_status->running[0];
-  //Order
-  $order = $functions->createOrder($_POST['schedulingTable']);
-  //Tamaño de Quantum
-  $quantum = $_POST['quantumSize'];
-  //Tiempo actual
-  $cpu_time = $_SESSION['attnum'];
-  //CPU
-  $cpu = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
-  var_dump($cpu);
-
+    //Datos de procesos
+    $num_procesos = $valores[2];
+    //Numero de paginas
+    $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
+    //PROCESOS
+    $process_data = $functions->getProcessData($num_procesos, $procesos);
+    //Arreglo de todos los procesos
+    $obj_process_arr = $functions->createProcessList($process_data);
+    //INTERRUPCION
+    $interruption = $functions->createInterruption($_POST['interruptionTable']);
+    //Arreglos de procesos por status
+    $_SESSION['lista_procesos_status'] = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
+    //Proceso corriendo actualmente
+    $running_process = $_SESSION['lista_procesos_status']->running[0];
+    //Order
+    $order = $functions->createOrder($_POST['schedulingTable']);
+    //Tamaño de Quantum
+    $quantum = $_POST['quantumSize'];
+    //Tiempo actual
+    $cpu_time = $_SESSION['attnum'];
+    //CPU
+    $_SESSION['cpu'] = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
+  }
   session_start();
+
+  //Verificador de tema
   if(isset($_POST['theme']))
   {
   $_SESSION['theme'] = $_POST['theme'];
+  }
+
+  //Agregar tiempo
+  if (isset($_POST['createProcess']) or isset($_POST['add']) or isset($_POST['add']))
+  {
+    $_SESSION['cpu']->addExecutionTime();
   }
 ?>
 <html lang="en">
@@ -104,7 +113,7 @@
                       <label>Tiempo</label>
                       <form method='post'>
                       <input class="form-control" name='add' type="submit" value='<?php echo $_SESSION['attnum']++ ?>'>
-                      <input class="btn btn-success mt-2" name='reset' type="submit" value="Start">
+                      <input class="btn btn-success mt-2" name='start' type="submit" value="Start">
                     </div>
                     <div class="col">
                       <label>Paginas</label>
@@ -154,7 +163,7 @@
                                     <p class="card-text">Nombre</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Nombre">
+                                    <input type="text" class="form-control" placeholder="Nombre" name="process_name" >
                                   </div>
                                 </div>
                                 <br>
@@ -163,7 +172,7 @@
                                     <p class="card-text">Páginas</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Páginas">
+                                    <input type="text" class="form-control" placeholder="Páginas" name="process_pages" >
                                   </div>
                                 </div>
                                 <br>
@@ -172,11 +181,29 @@
                                     <p class="card-text">Ejec Total</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" placeholder="Ejec Total">
+                                    <input type="text" class="form-control" placeholder="Ejec Total" name="estimatedTime" >
                                   </div>
                                 </div>
                                 <br>
-                                  <a href="#" class="btn btn-info">  +  </a>
+                                  <input name="createProcess" class="btn btn-info" type="submit" value=" + "></input>
+                                  <?php
+                                    if (isset($_POST['createProcess']))
+                                    {
+                                      if (empty($_POST['process_name']) or empty($_POST['estimatedTime']) or empty($_POST['process_pages']))
+                                      {
+                                          $_SESSION['attnum']--;
+                                          echo '<script language="javascript">';
+                                          echo 'alert("Tiene que llenar los campos del Proceso no sea Imbecil!")';
+                                          echo '</script>';
+                                      }else {
+                                        $new_process = $functions->createProcess($_POST['process_name'], $_POST['attnum'],$_POST['estimatedTime'], 3);
+                                        array_push($_SESSION['lista_procesos_status']->ready ,$new_process);
+                                        unset ($_POST['createProcess']);
+                                        $_SESSION['createProcess'] = $_POST['createProcess'];
+                                      }
+
+                                    }
+                                  ?>
                               </div>
                               <div class="card-footer text-muted">
 
@@ -193,7 +220,7 @@
                                     <tbody>
                                       <tr>
                                         <?php
-                                        foreach ($lista_procesos_status->ready as $process) {
+                                        foreach ($_SESSION['lista_procesos_status']->ready as $process) {
                                           if ($process) {
                                           echo '<tr>';
                                           echo '<th>'.$process->name.'</th>';
@@ -218,7 +245,7 @@
                                     <tbody>
                                         <tr>
                                           <?php
-                                          foreach ($lista_procesos_status->running as $process) {
+                                          foreach ($_SESSION['lista_procesos_status']->running as $process) {
                                             if ($process) {
                                             echo '<tr>';
                                             echo '<th>'.$process->name.'</th>';
@@ -242,7 +269,7 @@
                                 <table class="table" name="blocked">
                                     <tbody>
                                       <?php
-                                            foreach ($lista_procesos_status->blocked as $process) {
+                                            foreach ($_SESSION['lista_procesos_status']->blocked as $process) {
                                               if ($process) {
                                                 echo '<tr>';
                                                 echo '<th>'.$process->name.'</th>';
@@ -267,7 +294,7 @@
                                       <tbody>
                                         <tr>
                                           <?php
-                                          foreach ($lista_procesos_status->finished as $process) {
+                                          foreach ($_SESSION['lista_procesos_status']->finished as $process) {
                                             if ($process) {
                                             echo '<tr>';
                                             echo '<th>'.$process->name.'</th>';
@@ -305,25 +332,25 @@
                                     <p class="card-text">Nombre</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Nombre" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->name; ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                   <div class="col">
-                                    <p class="card-text">Tpo llegada</p>
+                                    <p class="card-text">Tiempo llegada</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Tpo" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->arrival; ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                   <div class="col">
-                                    <p class="card-text">Cpu Asignado</p>
+                                    <p class="card-text">Tiempo Estimado</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Cpu Asignado" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->estimated_time; ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -332,7 +359,7 @@
                                     <p class="card-text">Envejecimiento</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Env" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->calculateAging((int)$_SESSION['attnum']); ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -341,7 +368,7 @@
                                     <p class="card-text">Cpu Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Cpu Asignado" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->remainingCpu(); ?>" disabled>
                                   </div>
                                 </div>
                                 <br>

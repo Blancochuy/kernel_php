@@ -24,7 +24,7 @@ class Functions
       {
           $_SESSION['attnum'] = $val[1]; // Reset counter
       }
-      if (!isset($_POST['reset']))
+      if (!isset($_POST['start']))
       {
         $reem = array("attnum" => 0);
         $reiniciar = array_replace($reem);
@@ -185,6 +185,11 @@ class Functions
   public function createCpu($running_process, $order, $quantum, $cpu_time)
   {
     return new Cpu($running_process, $order, $quantum, $cpu_time);
+  }
+
+  public function createProcess($name, $arrival, $estimated_time, $status)
+  {
+    return new Process($name, $arrival, $estimated_time, $status);
   }
 }
   //PRUEBAS FUNCIONES
