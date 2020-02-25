@@ -35,7 +35,7 @@
   //Tamaño de Quantum
   $quantum = $_POST['quantumSize'];
   //Tiempo actual
-  $actual_time = $_SESSION['attnum'];
+  $cpu_time = $_SESSION['attnum'];
   //CPU
   $cpu = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
   var_dump($cpu);

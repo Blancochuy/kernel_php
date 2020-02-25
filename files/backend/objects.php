@@ -144,8 +144,22 @@ class Process
     $this->arrival = $arrival;
     $this->estimated_time = $estimated_time;
     $this->status = $status;
-    $this->remaining_cpu = "";
-    $this->aging = 0;
+    $this->execution_time = 0;
+
+  }
+  function calculateAging($actual_time)
+  {
+    $arrival = $this->arrival;
+    $execution_time = $this->execution_time;
+
+    return $actual_time - $arrival - $execution_time;
+  }
+  function remainingCpu()
+  {
+    $estimated_time = $this->estimated_time;
+    $execution_time = $this->execution_time;
+
+    return $estimated_time - $execution_time;
   }
 }
 
@@ -174,15 +188,9 @@ class Cpu
     $this->quantum = $quantum;
     $this->actual_time = $actual_time;
   }
-
-  function calculateRemainingCPU()
+  function addExecutionTime()
   {
-
-  }
-
-  function calculateAging()
-  {
-
+    $this->running_process->execution_time++;
   }
 }
 //PRUEBAS OBJETOS
