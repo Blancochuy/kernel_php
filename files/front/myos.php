@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
   require('../backend/functions.php');
+  require('../backend/kernel_obj.php');
   $functions = new Functions();
   //Funcion para extraer los valores del archivo txt
   if(isset($_GET['link']))
@@ -27,32 +28,42 @@
     //Arreglo de todos los procesos
     $obj_process_arr = $functions->createProcessList($process_data);
     //INTERRUPCION
-    $interruption = $functions->createInterruption($_POST['interruptionTable']);
+    $interruption = $functions->getInterruption($_POST['interruptionTable']);
+    //Order
+    @$order = $functions->getOrder($_POST['schedulingTable']);
     //Arreglos de procesos por status
-    $_SESSION['lista_procesos_status'] = $functions->createStatusProcess($order, $interruption, $obj_process_arr);
+    $_SESSION['lista_procesos_status'] = $functions->createStatusProcess($obj_process_arr);
     //Proceso corriendo actualmente
     $running_process = $_SESSION['lista_procesos_status']->running[0];
-    //Order
-    $order = $functions->createOrder($_POST['schedulingTable']);
     //Tamaño de Quantum
-    $quantum = $_POST['quantumSize'];
+    @$quantum = $_POST['quantumSize'];
     //Tiempo actual
     $cpu_time = $_SESSION['attnum'];
     //CPU
-    $_SESSION['cpu'] = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
+    $_SESSION['kernel']->cpu = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
+
+    //MAIN OBJECT
+    $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption);
   }
-  session_start();
+  @session_start();
   //Verificador de tema
   if(isset($_POST['theme']))
   {
   $_SESSION['theme'] = $_POST['theme'];
   }
-  //Agregar tiempo
+
+  //Al agregar tiempo o proceso se ejecutan
   if (isset($_POST['createProcess']) or isset($_POST['add']))
   {
-    $_SESSION['cpu']->addExecutionTime();
-    //$_SESSION['lista_procesos_status'] = $functions->running_to_finished($_SESSION['lista_procesos_status'], $_SESSION['cpu']);
+    $_SESSION['kernel']->cpu->addExecutionTime();
+    $_SESSION['kernel']->updateInterruption($_POST['interruptionTable']);
+    $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
+    $_SESSION['kernel']->running_to_finished();
+    $_SESSION['kernel']->ready_to_running();
+    $_SESSION['kernel']->running_to_blocked();
   }
+
+  @var_dump($_SESSION['kernel']->cpu->running_process->calculateAging((int)$_SESSION['attnum']));
 ?>
 <html lang="en">
     <head>
@@ -123,18 +134,13 @@
                       <div class="col">
                         <label>Interrupciones</label>
                         <select class="form-control custom-select" name='interruptionTable'>
-                            <option value="0"
-                            <?php if ($_POST['interruptionTable'] == "0") { echo "selected";} ?>>SVC de solicitud de I/O</option>
-                            <option value="1"
-                            <?php if ($_POST['interruptionTable'] == "1") { echo "selected";} ?>>SVC de terminación normal</option>
-                            <option value="2"
-                            <?php if ($_POST['interruptionTable'] == "2") { echo "selected";} ?>>SVC de solitud de fecha</option>
-                            <option value="3"
-                            <?php if ($_POST['interruptionTable'] == "3") { echo "selected";} ?>>Error de programa</option>
-                            <option value="4"
-                            <?php if ($_POST['interruptionTable'] == "4") { echo "selected";} ?>>Externa de quantum expirado</option>
-                            <option value="5"
-                            <?php if ($_POST['interruptionTable'] == "5") { echo "selected";} ?>>Dispositivo de I/O</option>
+                            <option value="0" selected>Ninguna</option>
+                            <option value="1">SVC de solicitud de I/O</option>
+                            <option value="2">SVC de terminación normal</option>
+                            <option value="3">SVC de solitud de fecha</option>
+                            <option value="4">Error de programa</option>
+                            <option value="5">Externa de quantum expirado</option>
+                            <option value="6">Dispositivo de I/O</option>
                         </select>
                       </div>
                 </div>
@@ -195,10 +201,10 @@
                                           echo 'alert("Tiene que llenar los campos del Proceso")';
                                           echo '</script>';
                                       }else {
-                                        $new_process = $functions->createProcess($_POST['process_name'], $_POST['attnum'],$_POST['estimatedTime'], 3);
-                                        array_push($_SESSION['lista_procesos_status']->ready ,$new_process);
+                                        @$new_process = $functions->createProcess($_POST['process_name'], $_POST['attnum'],$_POST['estimatedTime'], 3);
+                                        array_push($_SESSION['kernel']->lista_procesos_status->ready ,$new_process);
                                         unset ($_POST['createProcess']);
-                                        $_SESSION['createProcess'] = $_POST['createProcess'];
+                                        @$_SESSION['createProcess'] = $_POST['createProcess'];
                                       }
 
                                     }
@@ -219,7 +225,7 @@
                                     <tbody>
                                       <tr>
                                         <?php
-                                        foreach ($_SESSION['lista_procesos_status']->ready as $process) {
+                                        foreach ($_SESSION['kernel']->lista_procesos_status->ready as $process) {
                                           if ($process) {
                                           echo '<tr>';
                                           echo '<th>'.$process->name.'</th>';
@@ -244,7 +250,7 @@
                                     <tbody>
                                         <tr>
                                           <?php
-                                          foreach ($_SESSION['lista_procesos_status']->running as $process) {
+                                          foreach ($_SESSION['kernel']->lista_procesos_status->running as $process) {
                                             if ($process) {
                                             echo '<tr>';
                                             echo '<th>'.$process->name.'</th>';
@@ -268,7 +274,7 @@
                                 <table class="table" name="blocked">
                                     <tbody>
                                       <?php
-                                            foreach ($_SESSION['lista_procesos_status']->blocked as $process) {
+                                            foreach ($_SESSION['kernel']->lista_procesos_status->blocked as $process) {
                                               if ($process) {
                                                 echo '<tr>';
                                                 echo '<th>'.$process->name.'</th>';
@@ -293,7 +299,7 @@
                                       <tbody>
                                         <tr>
                                           <?php
-                                          foreach ($_SESSION['lista_procesos_status']->finished as $process) {
+                                          foreach ($_SESSION['kernel']->lista_procesos_status->finished as $process) {
                                             if ($process) {
                                             echo '<tr>';
                                             echo '<th>'.$process->name.'</th>';
@@ -331,7 +337,7 @@
                                     <p class="card-text">Nombre</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->name; ?>" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['kernel']->cpu->running_process->name; ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -340,7 +346,7 @@
                                     <p class="card-text">Tiempo llegada</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->arrival; ?>" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['kernel']->cpu->running_process->arrival; ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -349,7 +355,7 @@
                                     <p class="card-text">Tiempo Estimado</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->estimated_time; ?>" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['kernel']->cpu->running_process->estimated_time; ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -358,7 +364,7 @@
                                     <p class="card-text">Envejecimiento</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->calculateAging((int)$_SESSION['attnum']); ?>" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['kernel']->cpu->running_process->calculateAging((int)$_SESSION['attnum']); ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -367,7 +373,7 @@
                                     <p class="card-text">Cpu Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="<?php echo $_SESSION['cpu']->running_process->remainingCpu(); ?>" disabled>
+                                    <input type="text" class="form-control" value="<?php echo $_SESSION['kernel']->cpu->running_process->remainingCpu(); ?>" disabled>
                                   </div>
                                 </div>
                                 <br>
@@ -419,7 +425,7 @@
                                       <p class="card-text">Tam Quantum</p>
                                     </div>
                                     <div class="col">
-                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo $_POST['quantumSize']; ?>">
+                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo @$_POST['quantumSize']; ?>">
                                     </div>
                                   </div>
                                 </div>

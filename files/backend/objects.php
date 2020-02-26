@@ -1,23 +1,19 @@
 <?php
 class StatusProcess
 {
-  function __construct($running, $blocked, $ready, $finished, $order, Interruption $interruption)
+  function __construct($running, $blocked, $ready, $finished)
   {
       //processes divided by status
       $this->running = $running;
       $this->blocked = $blocked;
       $this->ready = $ready;
       $this->finished = $finished;
-      //schedule order
-      $this->order = $order;
-      //nombre de interrupcion
-      $this->interruption = $interruption;
   }
 }
 
 class Process
 {
-  //datos CPU proc1: llegada, tiempo total estimado, estado (1-running, 2-blocked, 3-ready)
+  //datos CPU proc1: llegada, tiempo total estimado, estado (1-running, 2-blocked, 3-ready, 4-finished)
   function __construct($name, $arrival, $estimated_time, $status)
   {
     $this->name = $name;
@@ -29,9 +25,9 @@ class Process
   }
   function calculateAging($actual_time)
   {
-    $arrival = $this->arrival;
+    $waiting = $actual_time - $this->arrival;
     $execution_time = $this->execution_time;
-    $aging = $actual_time - $arrival - $execution_time;
+    $aging = ($waiting-1) + (1*$execution_time);
     return $aging;
   }
   function remainingCpu()
@@ -43,28 +39,11 @@ class Process
   }
 }
 
-class Interruption
-{
-  function __construct($tipo)
-  {
-    $this->tipo = $tipo;
-  }
-}
-
-class Order
-{
-  function __construct($tipo)
-  {
-    $this->tipo = $tipo;
-  }
-}
-
 class Cpu
 {
-  function __construct($running_process, $order, $quantum, $actual_time)
+  function __construct($running_process, $quantum, $actual_time)
   {
     $this->running_process = $running_process;
-    $this->scheduling_order = $order;
     $this->quantum = $quantum;
     $this->actual_time = $actual_time;
   }
@@ -77,6 +56,22 @@ class Cpu
   {
     $boolean = (($this->running_process->remainingCpu()) == 0);
     return $boolean;
+  }
+
+  function running_process_blocked($interruption)
+  {
+    if ($interruption == "SVC de solicitud de I/O") {
+      return true;
+    }
+    return false;
+  }
+
+  function ready_process_running()
+  {
+    if ($this->running_process_finished()) {
+      return true;
+    }
+    return false;
   }
 }
 //PRUEBAS OBJETOS

@@ -110,61 +110,65 @@ class Functions
     return $arr_process;
   }
 
-  //  Interruptions
-  public function createInterruption($value) {
-    $interruption = new Interruption(" ");
+
+  public function getInterruption($value) {
+    $interruption = "";
 
     switch ($value) {
       case 0:
-        $interruption->tipo = "SVC de solicitud de I/O";
+        $interruption = "Ninguna";
         break;
       case 1:
-        $interruption->tipo = "SVC de terminación normal";
+        $interruption = "SVC de solicitud de I/O";
         break;
       case 2:
-        $interruption->tipo = "SVC de solitud de fecha";
+        $interruption = "SVC de terminación normal";
         break;
       case 3:
-        $interruption->tipo = "Error de programa";
+        $interruption = "SVC de solitud de fecha";
         break;
       case 4:
-        $interruption->tipo = "Externa de quantum expirado";
+        $interruption = "Error de programa";
         break;
       case 5:
-        $interruption->tipo = "Dispositivo de I/O";
+        $interruption = "Externa de quantum expirado";
+        break;
+      case 6:
+        $interruption = "Dispositivo de I/O";
         break;
     }
     return $interruption;
   }
 
-  public function createOrder($value) {
-    $order = new Order(" ");
+  public function getOrder($value) {
+    $order = "";
     switch ($value) {
       case 0:
-        $order->tipo = "FIFO";
+        $order = "FIFO";
         break;
       case 1:
-        $order->tipo = "Round Robbin";
+        $order = "Round Robbin";
         break;
       case 2:
-        $order->tipo = "Shortest Job First";
+        $order = "Shortest Job First";
         break;
       case 3:
-        $order->tipo = "Shortest Remaining Time";
+        $order = "Shortest Remaining Time";
         break;
       case 4:
-        $order->tipo = "Highest Response";
+        $order = "Highest Response";
         break;
       case 5:
-        $order->tipo = "Multi Level Feedback Queues";
+        $order = "Multi Level Feedback Queues";
         break;
     }
     return $order;
   }
 
-  public function createStatusProcess($order, $interruption, $obj_process_arr)
+  //CREACION DE OBJECTS
+  public function createStatusProcess($obj_process_arr)
   {
-    $lista_procesos_status = new StatusProcess([],[],[],[],$order,$interruption);
+    $lista_procesos_status = new StatusProcess([],[],[],[]);
 
     foreach ($obj_process_arr as $key => $process) {
       switch ($process->status) {
@@ -192,15 +196,6 @@ class Functions
     return new Process($name, $arrival, $estimated_time, $status);
   }
 
-  public function running_to_finished(StatusProcess $lista_procesos_status, Cpu $cpu)
-  {
-    if ($cpu->running_process_finished()) {
-      $finished = $lista_procesos_status->running->pop();
-      array_push($lista_procesos_status->finished, $finished);
-      return $lista_procesos_status;
-    }
-    return $lista_procesos_status;
-  }
 }
   //PRUEBAS FUNCIONES
   /*
