@@ -42,17 +42,16 @@
     $_SESSION['cpu'] = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
   }
   session_start();
-
   //Verificador de tema
   if(isset($_POST['theme']))
   {
   $_SESSION['theme'] = $_POST['theme'];
   }
-
   //Agregar tiempo
-  if (isset($_POST['createProcess']) or isset($_POST['add']) or isset($_POST['add']))
+  if (isset($_POST['createProcess']) or isset($_POST['add']))
   {
     $_SESSION['cpu']->addExecutionTime();
+    //$_SESSION['lista_procesos_status'] = $functions->running_to_finished($_SESSION['lista_procesos_status'], $_SESSION['cpu']);
   }
 ?>
 <html lang="en">
@@ -193,7 +192,7 @@
                                       {
                                           $_SESSION['attnum']--;
                                           echo '<script language="javascript">';
-                                          echo 'alert("Tiene que llenar los campos del Proceso no sea Imbecil!")';
+                                          echo 'alert("Tiene que llenar los campos del Proceso")';
                                           echo '</script>';
                                       }else {
                                         $new_process = $functions->createProcess($_POST['process_name'], $_POST['attnum'],$_POST['estimatedTime'], 3);

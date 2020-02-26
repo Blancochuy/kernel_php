@@ -1,21 +1,17 @@
 <?php
 class StatusProcess
 {
-  function __construct($running, $blocked, $ready, $order, Interruption $interruption)
+  function __construct($running, $blocked, $ready, $finished, $order, Interruption $interruption)
   {
       //processes divided by status
       $this->running = $running;
       $this->blocked = $blocked;
       $this->ready = $ready;
+      $this->finished = $finished;
       //schedule order
       $this->order = $order;
       //nombre de interrupcion
       $this->interruption = $interruption;
-  }
-
-  //PENDIENTE A RECIBIR PARAMETROS
-  function roundRobin()
-  {
   }
 }
 
@@ -75,6 +71,12 @@ class Cpu
   function addExecutionTime()
   {
     $this->running_process->execution_time++;
+  }
+
+  function running_process_finished()
+  {
+    $boolean = (($this->running_process->remainingCpu()) == 0);
+    return $boolean;
   }
 }
 //PRUEBAS OBJETOS

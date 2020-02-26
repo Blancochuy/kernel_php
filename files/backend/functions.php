@@ -164,7 +164,7 @@ class Functions
 
   public function createStatusProcess($order, $interruption, $obj_process_arr)
   {
-    $lista_procesos_status = new StatusProcess([],[],[],$order,$interruption);
+    $lista_procesos_status = new StatusProcess([],[],[],[],$order,$interruption);
 
     foreach ($obj_process_arr as $key => $process) {
       switch ($process->status) {
@@ -190,6 +190,16 @@ class Functions
   public function createProcess($name, $arrival, $estimated_time, $status)
   {
     return new Process($name, $arrival, $estimated_time, $status);
+  }
+
+  public function running_to_finished(StatusProcess $lista_procesos_status, Cpu $cpu)
+  {
+    if ($cpu->running_process_finished()) {
+      $finished = $lista_procesos_status->running->pop();
+      array_push($lista_procesos_status->finished, $finished);
+      return $lista_procesos_status;
+    }
+    return $lista_procesos_status;
   }
 }
   //PRUEBAS FUNCIONES
