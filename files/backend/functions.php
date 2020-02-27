@@ -104,7 +104,7 @@ class Functions
                 break;
         }
       }
-      $process = new Process($i, $arrival, $estimated_time, $status);
+      $process = new Process($i+1, $arrival, $estimated_time, $status);
       array_push($arr_process, $process);
     }
     return $arr_process;
@@ -122,10 +122,10 @@ class Functions
         $interruption = "SVC de solicitud de I/O";
         break;
       case 2:
-        $interruption = "SVC de terminación normal";
+        $interruption = "SVC de terminacion normal";
         break;
       case 3:
-        $interruption = "SVC de solitud de fecha";
+        $interruption = "SVC de solicitud de fecha";
         break;
       case 4:
         $interruption = "Error de programa";
@@ -186,9 +186,9 @@ class Functions
     return $lista_procesos_status;
   }
 
-  public function createCpu($running_process, $order, $quantum, $cpu_time)
+  public function createCpu($running_process, $quantum, $cpu_time)
   {
-    return new Cpu($running_process, $order, $quantum, $cpu_time);
+    return new Cpu($running_process, $quantum, $cpu_time);
   }
 
   public function createProcess($name, $arrival, $estimated_time, $status)

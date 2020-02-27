@@ -25,9 +25,7 @@ class Process
   }
   function calculateAging($actual_time)
   {
-    $waiting = $actual_time - $this->arrival;
-    $execution_time = $this->execution_time;
-    $aging = ($waiting-1) + (1*$execution_time);
+    $aging = $actual_time - $this->arrival - ($this->estimated_time - $this->remainingCpu())-1;
     return $aging;
   }
   function remainingCpu()
@@ -44,31 +42,76 @@ class Cpu
   function __construct($running_process, $quantum, $actual_time)
   {
     $this->running_process = $running_process;
-    $this->quantum = $quantum;
+    $this->quantum = (int)$quantum;
     $this->actual_time = $actual_time;
+    $this->contQuantum = $quantum;
   }
   function addExecutionTime()
   {
     $this->running_process->execution_time++;
+    if ($this->quantum != 0) {
+      $this->contQuantum-=1;
+    }
   }
 
-  function running_process_finished()
+  function is_running_process_finished()
   {
     $boolean = (($this->running_process->remainingCpu()) == 0);
     return $boolean;
   }
 
-  function running_process_blocked($interruption)
+  function is_ready_process_running()
   {
-    if ($interruption == "SVC de solicitud de I/O") {
+    if ($this->is_running_process_finished()) {
       return true;
     }
     return false;
   }
 
-  function ready_process_running()
+  //INTERRUPTIONS (Receive Interruption as parameter)
+  /* de running a blocked*/
+  function is_io_interruption($interruption)
   {
-    if ($this->running_process_finished()) {
+    if ($interruption == "SVC de solicitud de I/O")
+    {
+      return true;
+    }
+    return false;
+  }
+
+  function is_date_request($interruption)
+  {
+    if ($interruption == "SVC de solicitud de fecha")
+    {
+      return true;
+    }
+    return false;
+  }
+
+  /*De running a finished*/
+  function is_normal_termination($interruption)
+  {
+    if ($interruption == "SVC de terminacion normal")
+    {
+      return true;
+    }
+    return false;
+  }
+
+  function is_program_error($interruption)
+  {
+    if ($interruption == "Error de programa")
+    {
+      return true;
+    }
+    return false;
+  }
+
+  /*De blocked a ready*/
+  function is_io_device($interruption)
+  {
+    if ($interruption == "Dispositivo de I/O")
+    {
       return true;
     }
     return false;

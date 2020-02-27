@@ -40,7 +40,7 @@
     //Tiempo actual
     $cpu_time = $_SESSION['attnum'];
     //CPU
-    $_SESSION['kernel']->cpu = $functions->createCpu($running_process, $order, $quantum, $cpu_time);
+    $_SESSION['kernel']->cpu = $functions->createCpu($running_process, $quantum, $cpu_time);
 
     //MAIN OBJECT
     $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption);
@@ -59,11 +59,10 @@
     $_SESSION['kernel']->updateInterruption($_POST['interruptionTable']);
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
     $_SESSION['kernel']->running_to_finished();
-    $_SESSION['kernel']->ready_to_running();
     $_SESSION['kernel']->running_to_blocked();
+    $_SESSION['kernel']->blocked_to_ready();
   }
 
-  @var_dump($_SESSION['kernel']->cpu->running_process->calculateAging((int)$_SESSION['attnum']));
 ?>
 <html lang="en">
     <head>
@@ -137,7 +136,7 @@
                             <option value="0" selected>Ninguna</option>
                             <option value="1">SVC de solicitud de I/O</option>
                             <option value="2">SVC de terminación normal</option>
-                            <option value="3">SVC de solitud de fecha</option>
+                            <option value="3">SVC de solicitud de fecha</option>
                             <option value="4">Error de programa</option>
                             <option value="5">Externa de quantum expirado</option>
                             <option value="6">Dispositivo de I/O</option>
