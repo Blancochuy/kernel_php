@@ -46,10 +46,15 @@
     $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption);
   }
   @session_start();
+
   //Verificador de tema
   if(isset($_POST['theme']))
   {
   $_SESSION['theme'] = $_POST['theme'];
+  }
+  if(isset($_POST['quantumSize']))
+  {
+     $_SESSION['quantumSize'] = $_POST['quantumSize'];
   }
 
   //Al agregar tiempo o proceso se ejecutan
@@ -61,7 +66,7 @@
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
     $_SESSION['kernel']->run();
   }
-
+var_dump($_SESSION['kernel']->cpu->quantum);
 ?>
 <html lang="en">
     <head>
@@ -423,7 +428,7 @@
                                       <p class="card-text">Tam Quantum</p>
                                     </div>
                                     <div class="col">
-                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo @$_SESSION['kernel']->cpu->contQuantum; ?>">
+                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo @$_SESSION['quantumSize']; ?>">
                                     </div>
                                   </div>
                                 </div>
