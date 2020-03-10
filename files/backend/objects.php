@@ -49,9 +49,7 @@ class Cpu
   function addExecutionTime()
   {
     $this->running_process->execution_time++;
-    if ($this->quantum != 0) {
-      $this->contQuantum-=1;
-    }
+    $this->running_process->contQuantum++;
   }
 
   function is_running_process_finished()
@@ -68,6 +66,18 @@ class Cpu
     return false;
   }
 
+  function quantum_left()
+  {
+    return $this->quantum - $this->contQuantum;
+  }
+
+  function is_quantum_over()
+  {
+    if ($this->quantum == $this->contQuantum) {
+      return true;
+    }
+    return false;
+  }
   //INTERRUPTIONS (Receive Interruption as parameter)
   /* de running a blocked*/
   function is_io_interruption($interruption)

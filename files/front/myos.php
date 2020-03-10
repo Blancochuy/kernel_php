@@ -36,7 +36,7 @@
     //Proceso corriendo actualmente
     $running_process = $_SESSION['lista_procesos_status']->running[0];
     //Tamaño de Quantum
-    @$quantum = $_POST['quantumSize'];
+    @$quantum = $_SESSION['quantumSize'];
     //Tiempo actual
     $cpu_time = $_SESSION['attnum'];
     //CPU
@@ -55,12 +55,11 @@
   //Al agregar tiempo o proceso se ejecutan
   if (isset($_POST['createProcess']) or isset($_POST['add']))
   {
+    $_SESSION['kernel']->cpu->quantum = $_SESSION['quantumSize'];
     $_SESSION['kernel']->cpu->addExecutionTime();
     $_SESSION['kernel']->updateInterruption($_POST['interruptionTable']);
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
-    $_SESSION['kernel']->running_to_finished();
-    $_SESSION['kernel']->running_to_blocked();
-    $_SESSION['kernel']->blocked_to_ready();
+    $_SESSION['kernel']->run();
   }
 
 ?>
@@ -200,7 +199,7 @@
                                           echo 'alert("Tiene que llenar los campos del Proceso")';
                                           echo '</script>';
                                       }else {
-                                        @$new_process = $functions->createProcess($_POST['process_name'], $_POST['attnum'],$_POST['estimatedTime'], 3);
+                                        @$new_process = $functions->createProcess($_POST['process_name'], $_SESSION['attnum'], $_POST['estimatedTime'], 3);
                                         array_push($_SESSION['kernel']->lista_procesos_status->ready ,$new_process);
                                         unset ($_POST['createProcess']);
                                         @$_SESSION['createProcess'] = $_POST['createProcess'];
@@ -381,7 +380,7 @@
                                     <p class="card-text">Quantum Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Quantum" name="quantumLeft" disabled value = <?php  ?> >
+                                    <input type="text" class="form-control" value="Quantum" name="quantumLeft" disabled value = "<?php echo $_SESSION['kernel']->cpu->quantum_left(); ?>" >
                                   </div>
                                 </div>
                               </div>
@@ -424,7 +423,7 @@
                                       <p class="card-text">Tam Quantum</p>
                                     </div>
                                     <div class="col">
-                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo @$_POST['quantumSize']; ?>">
+                                      <input type="text" class="form-control" name="quantumSize" value="<?php echo @$_SESSION['kernel']->cpu->contQuantum; ?>">
                                     </div>
                                   </div>
                                 </div>
