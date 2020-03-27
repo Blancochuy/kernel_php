@@ -39,44 +39,38 @@ class Kernel
   public function run()
   {
     switch ($this->order) {
-      case 'FIFO':
+      case "FIFO":
         $this->running_to_finished();
-        $this->ready_to_running();
         $this->running_to_blocked();
         $this->blocked_to_ready();
         break;
 
-      case 'Round Robbin':
+      case "Round Robbin":
         $this->running_to_finished_rr();
-        $this->ready_to_running_rr();
         $this->running_to_blocked_rr();
         $this->blocked_to_ready_rr();
         break;
 
-      case 'Shortest Job First':
+      case "Shortest Job First":
         $this->running_to_finished_sjf();
-        $this->ready_to_running_sjf();
         $this->running_to_blocked_sjf();
         $this->blocked_to_ready_sjf();
         break;
 
-      case 'Shortest Remaining Time':
+      case "Shortest Remaining Time":
         $this->running_to_finished_srt();
-        $this->ready_to_running_srt();
         $this->running_to_blocked_srt();
         $this->blocked_to_ready_srt();
         break;
 
-      case 'Highest Response':
+      case "Highest Response":
         $this->running_to_finished_hrt();
-        $this->ready_to_running_hrt();
         $this->running_to_blocked_hrt();
         $this->blocked_to_ready_hrt();
         break;
 
-      case 'Multi Level Feedback Queues':
+      case "Multi Level Feedback Queues":
         $this->running_to_finished_mlfq();
-        $this->ready_to_running_mlfq();
         $this->running_to_blocked_mlfq();
         $this->blocked_to_ready_mlfq();
         break;
@@ -345,7 +339,7 @@ class Kernel
           $this->cpu->is_normal_termination($this->interruption) or
           $this->cpu->is_program_error($this->interruption))
       {
-        $finished_process= array_shift($this->lista_procesos_status->running);
+        $finished_process = array_shift($this->lista_procesos_status->running);
         array_unshift($this->lista_procesos_status->finished, $finished_process);
         if (!empty($this->lista_procesos_status->ready)) {
           $this->ready_to_running();
@@ -384,6 +378,9 @@ class Kernel
            $ready_process= array_shift($this->lista_procesos_status->blocked);
            array_unshift($this->lista_procesos_status->ready, $ready_process);
            $this->updateCpu();
+        }
+        if (empty($this->lista_procesos_status->running)) {
+          $this->ready_to_running();
         }
       }
     }

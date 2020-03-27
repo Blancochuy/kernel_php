@@ -52,6 +52,7 @@
   {
   $_SESSION['theme'] = $_POST['theme'];
   }
+
   if(isset($_POST['quantumSize']))
   {
      $_SESSION['quantumSize'] = $_POST['quantumSize'];
@@ -66,7 +67,7 @@
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
     $_SESSION['kernel']->run();
   }
-var_dump($_SESSION['kernel']->cpu->quantum);
+
 ?>
 <html lang="en">
     <head>
@@ -385,7 +386,14 @@ var_dump($_SESSION['kernel']->cpu->quantum);
                                     <p class="card-text">Quantum Restante</p>
                                   </div>
                                   <div class="col">
-                                    <input type="text" class="form-control" value="Quantum" name="quantumLeft" disabled value = "<?php echo $_SESSION['kernel']->cpu->quantum_left(); ?>" >
+                                    <input type="text" class="form-control" name="quantumLeft" disabled value = "<?php
+                                        if ($_SESSION['kernel']->order != "Round Robbin") {
+                                          echo "N/A";
+                                        }
+                                        else {
+                                          echo $_SESSION['kernel']->cpu->quantum_left();
+                                        }
+                                     ?>" >
                                   </div>
                                 </div>
                               </div>

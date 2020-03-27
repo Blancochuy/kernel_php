@@ -28,6 +28,7 @@ class Process
     $aging = $actual_time - $this->arrival - ($this->estimated_time - $this->remainingCpu())-1;
     return $aging;
   }
+
   function remainingCpu()
   {
     $estimated_time = $this->estimated_time;
@@ -44,18 +45,24 @@ class Cpu
     $this->running_process = $running_process;
     $this->quantum = (int)$quantum;
     $this->actual_time = $actual_time;
-    $this->contQuantum = $quantum;
+    $this->contQuantum = 0;
   }
+
   function addExecutionTime()
   {
     $this->running_process->execution_time++;
-    $this->running_process->contQuantum++;
+    $this->contQuantum++;
   }
 
   function is_running_process_finished()
   {
-    $boolean = (($this->running_process->remainingCpu()) == 0);
-    return $boolean;
+    if ($this->running_process instanceof stdClass) {
+      return false;
+    }
+    else {
+      $boolean = ($this->running_process->remainingCpu() == 0);
+      return $boolean;
+    }
   }
 
   function is_ready_process_running()
