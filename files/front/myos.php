@@ -90,7 +90,7 @@
 
 
         <!-- Theme Styles -->
-        <link href="../../assets/css/lime.min.css" rel="stylesheet">
+        <link href="../../assets/css/lime.css" rel="stylesheet">
         <form class="ml-4 mt-4"method="post">
             <input class="custom-radio mt-2" type="radio" name="theme" value="light"<?php if ($_SESSION['theme'] == "light") { echo "checked";} ?>>LIGHT</input>
             <input class="custom-radio mt-2" type="radio" name="theme" value="dark"<?php if ($_SESSION['theme'] == "dark") { echo "checked";} ?>>DARK</input>
@@ -117,7 +117,7 @@
     </head>
     <body class="no-loader">
 
-        <div class="lime-header">
+        <div class="lime-header" id="myHeader">
             <nav class="navbar navbar-expand-lg justify-content-end">
 
                 <a class="navbar-brand" href="#">MyOs</a>
@@ -126,7 +126,7 @@
                     <div class="col">
                       <label>Tiempo</label>
                       <form method='post'>
-                      <input class="form-control" name='add' type="submit" value='<?php echo $_SESSION['attnum']++ ?>'>
+                      <input class="form-control" onclick="position()" name='add' type="submit" value='<?php echo $_SESSION['attnum']++ ?>'>
                       <input class="btn btn-success mt-2" name='start' type="submit" value="Start">
                     </div>
                     <div class="col">
@@ -540,5 +540,33 @@
         <script src="../../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
         <script src="../../assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
         <script src="../../assets/js/lime.min.js"></script>
+        <script>
+
+
+window.onscroll = function() {myFunction()};
+
+var header = document.getElementById("myHeader");
+var sticky = header.offsetTop;
+
+function myFunction()
+{
+  if (window.pageYOffset > sticky)
+  {
+    header.classList.add("sticky");
+  }
+  else
+  {
+    header.classList.remove("sticky");
+  }
+}
+function position()
+{
+
+ var location = window.pageYOffset;
+
+ document.documentElement.scrollTop = document.body.scrollTop = location;
+
+}
+</script>
     </body>
 </html>
