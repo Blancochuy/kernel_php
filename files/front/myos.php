@@ -21,8 +21,8 @@
 
     //Datos de procesos
     $num_procesos = $valores[2];
-    //Numero de paginas
-    $paginas_procesos = $functions->numeroPaginasProcesos($num_procesos, $procesos);
+    //Datos Paginas
+    $datos_paginas_procesos = $functions->getPagesData($num_procesos, $procesos);
     //PROCESOS
     $process_data = $functions->getProcessData($num_procesos, $procesos);
     //Arreglo de todos los procesos
@@ -67,6 +67,8 @@
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
     $_SESSION['kernel']->run();
   }
+
+  var_dump($datos_paginas_procesos);
 
 ?>
 <html lang="en">

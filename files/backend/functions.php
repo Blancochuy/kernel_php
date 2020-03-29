@@ -165,6 +165,29 @@ class Functions
     return $order;
   }
 
+  public function getPagesData($num_procesos, $procesos)
+  {
+      $all_datos_memoria_procesos = [];
+      $datos_memoria_procesos = [];
+
+      for ($i = 0; $i < $num_procesos; $i++)
+      {
+          $procesos = array_slice($procesos, 3);
+          $num_paginas_proc = array_shift($procesos);
+          for($j = 0; $j < $num_paginas_proc; $j++)
+          {
+              $page = array_slice($procesos, 0, 6);
+              $procesos = array_slice($procesos, 6);
+              array_push($datos_memoria_procesos, $page);
+              $page = null;
+          }
+          array_push($all_datos_memoria_procesos, $datos_memoria_procesos);
+          $datos_memoria_procesos = [];
+      }
+
+      return $all_datos_memoria_procesos;
+  }
+
   //CREACION DE OBJECTS
   public function createStatusProcess($obj_process_arr)
   {
