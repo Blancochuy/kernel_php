@@ -14,13 +14,14 @@ class StatusProcess
 class Process
 {
   //datos CPU proc1: llegada, tiempo total estimado, estado (1-running, 2-blocked, 3-ready, 4-finished)
-  function __construct($name, $arrival, $estimated_time, $status)
+  function __construct($name, $arrival, $estimated_time, $status, $pages)
   {
     $this->name = $name;
     $this->arrival = $arrival;
     $this->estimated_time = $estimated_time;
     $this->status = $status;
     $this->execution_time = 0;
+    $this->pages = $pages;
 
   }
   function calculateAging($actual_time)
@@ -134,6 +135,20 @@ class Cpu
     return false;
   }
 }
+
+class Page
+{
+  function __construct($residence, $arrival, $last_access, $accesses, $nur_referencia, $nur_modificacion)
+  {
+    $this->residence = $residence;
+    $this->arrival = $arrival;
+    $this->last_access = $last_access;
+    $this->accesses = $accesses;
+    $this->nur_referencia = $nur_referencia;
+    $this->nur_modificacion = $nur_modificacion;
+  }
+}
+
 //PRUEBAS OBJETOS
 /*
 

@@ -66,9 +66,12 @@ class Functions
     $datos_memoria = 6;
     $index_global = 0;
     $process_data = [];
+    $aux_procesos = $procesos;
 
     for ($i = 0; $i < $num_procesos; $i++) {
+
         array_push($process_data, array_slice($procesos, $index_global, 3));
+
         //
         $index_global+=3;
         $paginas = $procesos[$index_global];
@@ -77,6 +80,24 @@ class Functions
         }
         $index_global++;
     }
+
+    $datos_memoria_procesos = [];
+
+    for ($i = 0; $i < $num_procesos; $i++)
+    {
+        $aux_procesos = array_slice($aux_procesos, 3);
+        $num_paginas_proc = array_shift($aux_procesos);
+        for($j = 0; $j < $num_paginas_proc; $j++)
+        {
+            $page = array_slice($aux_procesos, 0, 6);
+            $aux_procesos = array_slice($aux_procesos, 6);
+            array_push($datos_memoria_procesos, $page);
+            $page = null;
+        }
+        array_push($process_data[$i], $datos_memoria_procesos);
+        $datos_memoria_procesos = [];
+    }
+
     return $process_data;
   }
 
@@ -86,12 +107,13 @@ class Functions
     $arrival;
     $estimated_time;
     $status;
+    $pages;
     //arreglo de objetos Process
     $arr_process = [];
 
     $num_procesos = count($process_data);
     for ($i=0; $i < $num_procesos; $i++) {
-      for ($j=0; $j < 3; $j++) {
+      for ($j=0; $j < 4; $j++) {
         switch ($j) {
             case 0:
                 $arrival = $process_data[$i][$j];
@@ -102,9 +124,12 @@ class Functions
             case 2:
                 $status = $process_data[$i][$j];
                 break;
+            case 3:
+                $pages = $this->createPages($process_data[$i][$j]);
+                break;
         }
       }
-      $process = new Process($i+1, $arrival, $estimated_time, $status);
+      $process = new Process($i+1, $arrival, $estimated_time, $status, $pages);
       array_push($arr_process, $process);
     }
     return $arr_process;
@@ -165,29 +190,6 @@ class Functions
     return $order;
   }
 
-  public function getPagesData($num_procesos, $procesos)
-  {
-      $all_datos_memoria_procesos = [];
-      $datos_memoria_procesos = [];
-
-      for ($i = 0; $i < $num_procesos; $i++)
-      {
-          $procesos = array_slice($procesos, 3);
-          $num_paginas_proc = array_shift($procesos);
-          for($j = 0; $j < $num_paginas_proc; $j++)
-          {
-              $page = array_slice($procesos, 0, 6);
-              $procesos = array_slice($procesos, 6);
-              array_push($datos_memoria_procesos, $page);
-              $page = null;
-          }
-          array_push($all_datos_memoria_procesos, $datos_memoria_procesos);
-          $datos_memoria_procesos = [];
-      }
-
-      return $all_datos_memoria_procesos;
-  }
-
   //CREACION DE OBJECTS
   public function createStatusProcess($obj_process_arr)
   {
@@ -217,6 +219,23 @@ class Functions
   public function createProcess($name, $arrival, $estimated_time, $status)
   {
     return new Process($name, $arrival, $estimated_time, $status);
+  }
+
+  public function createPages($arr_pages)
+  {
+    $process_pages = [];
+    foreach ($arr_pages as $key => $page) {
+      $residence = $page[0];
+      $arrival = $page[1];
+      $last_access = $page[2];
+      $accesses = $page[3];
+      $nur_referencia = $page[4];
+      $nur_modificacion = $page[5];
+
+      $page = new Page($residence, $arrival, $last_access, $accesses, $nur_referencia, $nur_modificacion);
+      array_push($process_pages, $page);
+    }
+    return $process_pages;
   }
 
 }

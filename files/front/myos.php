@@ -9,6 +9,7 @@
       $link = htmlentities($_GET['link']);
       $myData = $functions->getData($link);
   }
+
   if(isset($_POST['start']))
   {
     //funcion para partir el areglos
@@ -21,8 +22,6 @@
 
     //Datos de procesos
     $num_procesos = $valores[2];
-    //Datos Paginas
-    $datos_paginas_procesos = $functions->getPagesData($num_procesos, $procesos);
     //PROCESOS
     $process_data = $functions->getProcessData($num_procesos, $procesos);
     //Arreglo de todos los procesos
@@ -45,6 +44,7 @@
     //MAIN OBJECT
     $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption);
   }
+
   @session_start();
 
   //Verificador de tema
@@ -68,7 +68,7 @@
     $_SESSION['kernel']->run();
   }
 
-  var_dump($datos_paginas_procesos);
+  var_dump($_SESSION['kernel']->cpu->running_process->pages);
 
 ?>
 <html lang="en">
