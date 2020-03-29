@@ -68,7 +68,7 @@
     $_SESSION['kernel']->run();
   }
 
-  var_dump($_SESSION['kernel']->cpu->running_process->pages);
+  var_dump($_SESSION['kernel']->cpu->running_process->pages[0]->residence);
 
 ?>
 <html lang="en">
@@ -466,28 +466,23 @@
                                     <th scope="col">llegada</th>
                                     <th scope="col">ult acceso</th>
                                     <th scope="col">accesos</th>
-                                    <th scope="col">NUR</th>
+                                    <th scope="col">NUR referencia</th>
+                                    <th scope="col">NUR modificacion</th>
                                 </tr>
                             </thead>
                             <tbody>
+                              <?php for ($i=0; $i < count($_SESSION['kernel']->cpu->running_process->pages); $i++) {  ?>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                    <th scope="row"><?php echo $i+1 ?></th>
+                                    <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->residence ?></td>
+                                    <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->arrival ?></td>
+                                    <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->last_access ?></td>
+                                    <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->accesses ?></td>
+                                    <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->nur_referencia ?></td>
+                                    <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->nur_modificacion ?></td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
+
+                              <?php } ?>
                             </tbody>
                         </table>
                       </div>
