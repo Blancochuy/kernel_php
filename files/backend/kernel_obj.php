@@ -430,13 +430,16 @@ class Kernel
           break;
       }
     }
-
     public function fifo_algorithm()
     {
       $max_pages_loaded = 3;
       $loaded_pages = 0;
-      for ($l=0; $l < count($this->cpu->running_process->pages); $l++) {
-        if ($this->cpu->running_process->pages[$l]->residence == 1) {
+      $aux_min = 999999;
+      $page_min = null;
+      for ($l=0; $l < count($this->cpu->running_process->pages); $l++)
+      {
+        if ($this->cpu->running_process->pages[$l]->residence == 1)
+        {
           $loaded_pages += 1;
         }
       }
@@ -453,35 +456,39 @@ class Kernel
           $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
         }
 
-        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages >= $max_pages_loaded)
+        if (($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0) and ($loaded_pages >= $max_pages_loaded))
         {
           for ($i=0; $i < count($this->cpu->running_process->pages); $i++)
           {
             $page = $this->cpu->running_process->pages[$i];
-            $aux_min = 999999;
-            $page_min = null;
-            if ($page->residence == 1 and $page->arrival < $aux_min)
+            //var_dump($page);
+            if ($page->residence == 1 and $page->last_access < $aux_min and ($loaded_pages >= $max_pages_loaded))
             {
-              $aux_min = $page->arrival;
+              $aux_min = $page->last_access;
+              var_dump($aux_min);
               $page_min = $i;
+              $this->cpu->running_process->pages[$page_min]->residence = 0;
             }
-            $this->cpu->running_process->pages[$page_min]->residence = 0;
+
           }
             $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
             $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
             $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
 
-          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0) {
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0)
+          {
             $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
           }
         }
 
-        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages < $max_pages_loaded) {
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages < $max_pages_loaded)
+        {
           $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
           $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
           $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
 
-          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0) {
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0)
+          {
             $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
           }
         }

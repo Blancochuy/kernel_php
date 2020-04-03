@@ -40,8 +40,7 @@
     $cpu_time = $_SESSION['attnum'];
     //CPU
     $_SESSION['kernel']->cpu = $functions->createCpu($running_process, $quantum, $cpu_time);
-    //Page Order
-    $_SESSION['pageOrder'] = $_POST['pageOrder'];
+
 
     //MAIN OBJECT
     $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption, $_SESSION['pageOrder']);
@@ -59,6 +58,11 @@
   {
      $_SESSION['quantumSize'] = $_POST['quantumSize'];
   }
+  if (isset($_POST['add']) or isset($_POST['start']))
+  {
+    //Page Order
+    $_SESSION['pageOrder'] = $_POST['pageOrder'];
+  }
 
   //Al agregar tiempo o proceso se ejecutan
   if (isset($_POST['createProcess']) or isset($_POST['add']))
@@ -73,7 +77,6 @@
     $_SESSION['kernel']->run_memory_pages();
   }
 
-  var_dump($_SESSION['kernel']->cpu->actual_time);
 
 
 ?>
