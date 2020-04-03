@@ -32,6 +32,11 @@ class Kernel
     $this->order = $functions->getOrder($value);
   }
 
+  public function updateActualTime($value)
+  {
+    $this->cpu->actual_time = $value;
+  }
+
   public function updateCpu()
   {
     $new_process = $this->lista_procesos_status->running[0];
@@ -393,20 +398,8 @@ class Kernel
     }
 
     #<---------Mewmoria Paginacion----------->
-    public function get_pages()
-    {
-      $pages = [];
-      for ($i=0; $i < count($_SESSION['kernel']->cpu->running_process->pages); $i++)
-      {
-        array_push($_SESSION['kernel']->cpu->running_process->pages[$i], $pages);
-      }
-      return $pages;
-    }
-
     public function run_memory_pages()
     {
-      $pages = $this->get_pages();
-
       switch ($this->page_order) {
         case "NUR":
           $this->nur_algorithm();
@@ -440,42 +433,57 @@ class Kernel
 
     public function fifo_algorithm()
     {
-      $loaded_pages = [];
-      for ($i=0; $i < count($this->cpu->running_process->pages); $i++)
-        {
-          if ($this->cpu->running_process->pages[i]->residence == 1)
-          {
-            array_push($this->cpu->running_process->pages[i], $loaded_pages);
-          }
+      $max_pages_loaded = 3;
+      $loaded_pages = 0;
+      for ($l=0; $l < count($this->cpu->running_process->pages); $l++) {
+        if ($this->cpu->running_process->pages[$l]->residence == 1) {
+          $loaded_pages += 1;
         }
+      }
 
-      if ($this->loaded_page = "Ninguna")
+      if ($this->loaded_page == "Ninguna")
       {
-        break;
+        return "";
       }
       else
       {
-        switch ($this->loaded_page)
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 1)
         {
-          case '1':
-            // code...
-            break;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->accesses +=1;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+        }
 
-          case '2':
-              // code...
-            break;
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages >= $max_pages_loaded)
+        {
+          for ($i=0; $i < count($this->cpu->running_process->pages); $i++)
+          {
+            $page = $this->cpu->running_process->pages[$i];
+            $aux_min = 999999;
+            $page_min = null;
+            if ($page->residence == 1 and $page->arrival < $aux_min)
+            {
+              $aux_min = $page->arrival;
+              $page_min = $i;
+            }
+            $this->cpu->running_process->pages[$page_min]->residence = 0;
+          }
+            $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
+            $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+            $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
 
-          case '3':
-                // code...
-            break;
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0) {
+            $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
+          }
+        }
 
-          case '4':
-                // code...
-            break;
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages < $max_pages_loaded) {
+          $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
 
-          case '5':
-                // code...
-            break;
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0) {
+            $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
+          }
         }
       }
 

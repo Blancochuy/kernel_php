@@ -68,10 +68,13 @@
     $_SESSION['kernel']->updateInterruption($_POST['interruptionTable']);
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
     $_SESSION['kernel']->updateLoadedPage($_POST['tablaPaginacion']);
+    $_SESSION['kernel']->updateActualTime($_SESSION['attnum']);
     $_SESSION['kernel']->run();
+    $_SESSION['kernel']->run_memory_pages();
   }
 
-  var_dump($_SESSION['kernel']->loaded_page);
+  var_dump($_SESSION['kernel']->cpu->actual_time);
+
 
 ?>
 <html lang="en">
