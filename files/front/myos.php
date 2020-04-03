@@ -40,9 +40,11 @@
     $cpu_time = $_SESSION['attnum'];
     //CPU
     $_SESSION['kernel']->cpu = $functions->createCpu($running_process, $quantum, $cpu_time);
+    //Page Order
+    $_SESSION['pageOrder'] = $_POST['pageOrder'];
 
     //MAIN OBJECT
-    $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption);
+    $_SESSION['kernel'] = new Kernel($_SESSION['lista_procesos_status'], $_SESSION['kernel']->cpu, $order, $interruption, $_SESSION['pageOrder']);
   }
 
   @session_start();
@@ -65,10 +67,11 @@
     $_SESSION['kernel']->cpu->addExecutionTime();
     $_SESSION['kernel']->updateInterruption($_POST['interruptionTable']);
     $_SESSION['kernel']->updateOrder($_POST['schedulingTable']);
+    $_SESSION['kernel']->updateLoadedPage($_POST['tablaPaginacion']);
     $_SESSION['kernel']->run();
   }
 
-  var_dump($_SESSION['kernel']->cpu->running_process->pages[0]->residence);
+  var_dump($_SESSION['kernel']->loaded_page);
 
 ?>
 <html lang="en">
@@ -134,7 +137,19 @@
                     <div class="col">
                       <label>Paginas</label>
                       <select class="form-control custom-select" name="tablaPaginacion">
-                          <option>Ejecutar paginas</option>
+                        <option value="Ninguna">Ninguna</option>
+                        <?php for ($i=0; $i < count($_SESSION['kernel']->cpu->running_process->pages); $i++) {
+                          ?>
+                          <option value=
+                          "<?php
+                            echo $i+1;
+                          ?>">
+                            <?php
+                              echo $i+1;
+                             ?>
+                          </option>
+                        <?php
+                        } ?>
                       </select>
                     </div>
                       <div class="col">
@@ -207,12 +222,12 @@
                                           echo 'alert("Tiene que llenar los campos del Proceso")';
                                           echo '</script>';
                                       }else {
-                                        @$new_process = $functions->createProcess($_POST['process_name'], $_SESSION['attnum'], $_POST['estimatedTime'], 3);
+                                        $pages = $functions->initializePages($_POST['process_pages']);
+                                        @$new_process = $functions->createProcess($_POST['process_name'], $_SESSION['attnum'], $_POST['estimatedTime'], 3, $pages);
                                         array_push($_SESSION['kernel']->lista_procesos_status->ready ,$new_process);
                                         unset ($_POST['createProcess']);
                                         @$_SESSION['createProcess'] = $_POST['createProcess'];
                                       }
-
                                     }
                                   ?>
                               </div>
@@ -443,7 +458,6 @@
                                   </div>
                                 </div>
                                 <div class="card-footer text-muted">
-                              </form>
                                 </div>
                             </div>
                         </div>
@@ -497,14 +511,24 @@
                                 </div>
                                 <div class="card-body">
                                   <div class="col">
-                                    <select class="form-control custom-select" name="exampleFormControlSelect2">
-                                        <option>NUR</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                    <select class="form-control custom-select" name="pageOrder">
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "NUR") { echo "selected";}?>>NUR</option>
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "FIFO") { echo "selected";}?>>FIFO</option>
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "LFU") { echo "selected";}?>>LFU</option>
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "LRU") { echo "selected";}?>>LRU</option>
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "RANDOM") { echo "selected";}?>>RANDOM</option>
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "SECOND CHANCE") { echo "selected";}?>>SECOND CHANCE</option>
+                                        <option
+                                        <?php if ($_SESSION['pageOrder'] == "REMPLAZO DE RELOJ") { echo "selected";}?>>REMPLAZO DE RELOJ</option>
                                     </select>
                                   </div>
+                                  </form>
                                   <br>
                                   <a href="#" class="btn btn-info">Reset a bits NUR</a>
                                 </div>

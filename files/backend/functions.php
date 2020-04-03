@@ -216,9 +216,9 @@ class Functions
     return new Cpu($running_process, $quantum, $cpu_time);
   }
 
-  public function createProcess($name, $arrival, $estimated_time, $status)
+  public function createProcess($name, $arrival, $estimated_time, $status, $pages)
   {
-    return new Process($name, $arrival, $estimated_time, $status);
+    return new Process($name, $arrival, $estimated_time, $status, $pages);
   }
 
   public function createPages($arr_pages)
@@ -233,6 +233,16 @@ class Functions
       $nur_modificacion = $page[5];
 
       $page = new Page($residence, $arrival, $last_access, $accesses, $nur_referencia, $nur_modificacion);
+      array_push($process_pages, $page);
+    }
+    return $process_pages;
+  }
+
+  public function initializePages($num_paginas)
+  {
+    $process_pages = [];
+    for ($i=0; $i < $num_paginas; $i++) {
+      $page = new Page(0, 0 , 0 ,0 ,0 ,0);
       array_push($process_pages, $page);
     }
     return $process_pages;

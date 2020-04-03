@@ -2,12 +2,14 @@
 class Kernel
 {
 
-  function __construct(StatusProcess $lista_procesos_status, Cpu $cpu, $order, $interruption)
+  function __construct(StatusProcess $lista_procesos_status, Cpu $cpu, $order, $interruption, $page_order)
   {
     $this->lista_procesos_status = $lista_procesos_status;
     $this->cpu = $cpu;
     $this->order = $order;
     $this->interruption = $interruption;
+    $this->page_order = $page_order;
+    $this->loaded_page = "Ninguna";
   }
 /* ORDER VALUES
   "0" FIFO
@@ -34,6 +36,11 @@ class Kernel
   {
     $new_process = $this->lista_procesos_status->running[0];
     $this->cpu->running_process = $new_process;
+  }
+
+  public function updateLoadedPage($value)
+  {
+    $this->loaded_page = $value;
   }
 
   public function run()
@@ -384,6 +391,100 @@ class Kernel
         }
       }
     }
+
+    #<---------Mewmoria Paginacion----------->
+    public function get_pages()
+    {
+      $pages = [];
+      for ($i=0; $i < count($_SESSION['kernel']->cpu->running_process->pages); $i++)
+      {
+        array_push($_SESSION['kernel']->cpu->running_process->pages[$i], $pages);
+      }
+      return $pages;
+    }
+
+    public function run_memory_pages()
+    {
+      $pages = $this->get_pages();
+
+      switch ($this->page_order) {
+        case "NUR":
+          $this->nur_algorithm();
+          break;
+
+        case "FIFO":
+          $this->fifo_algorithm();
+          break;
+
+        case "LFU":
+          $this->lfu_algorithm();
+          break;
+
+        case "LRU":
+          $this->lru_algorithm();
+          break;
+
+        case "RANDOM":
+          $this->random_algorithm();
+          break;
+
+        case "SECOND CHANCES":
+          $this->second_algorithm();
+          break;
+
+        case "REMPLAZO DE RELOJ":
+          $this->reloj_algorithm();
+          break;
+      }
+    }
+
+    public function fifo_algorithm()
+    {
+      $loaded_pages = [];
+      for ($i=0; $i < count($this->cpu->running_process->pages); $i++)
+        {
+          if ($this->cpu->running_process->pages[i]->residence == 1)
+          {
+            array_push($this->cpu->running_process->pages[i], $loaded_pages);
+          }
+        }
+
+      if (pagina loaded es igual a ninguna) {
+        // code...
+      }
+
+    }
+
+    public function nur_algorithm()
+    {
+
+    }
+
+    public function lfu_algorithm()
+    {
+
+    }
+
+    public function lru_algorithm()
+    {
+
+    }
+
+    public function random_algorithm()
+    {
+
+    }
+
+    public function second_algorithm()
+    {
+
+    }
+
+    public function reloj_algorithm()
+    {
+
+    }
+
 }
 
  ?>
