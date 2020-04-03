@@ -462,12 +462,17 @@ class Kernel
           {
             $page = $this->cpu->running_process->pages[$i];
             //var_dump($page);
+            $flag = true;
             if ($page->residence == 1 and $page->last_access < $aux_min and ($loaded_pages >= $max_pages_loaded))
             {
               $aux_min = $page->last_access;
-              var_dump($aux_min);
               $page_min = $i;
+              if($flag)
+              {
               $this->cpu->running_process->pages[$page_min]->residence = 0;
+              $flag = false;
+              break;
+              }
             }
 
           }
