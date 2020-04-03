@@ -449,8 +449,34 @@ class Kernel
           }
         }
 
-      if (pagina loaded es igual a ninguna) {
-        // code...
+      if ($this->loaded_page = "Ninguna")
+      {
+        break;
+      }
+      else
+      {
+        switch ($this->loaded_page)
+        {
+          case '1':
+            // code...
+            break;
+
+          case '2':
+              // code...
+            break;
+
+          case '3':
+                // code...
+            break;
+
+          case '4':
+                // code...
+            break;
+
+          case '5':
+                // code...
+            break;
+        }
       }
 
     }
