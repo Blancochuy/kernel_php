@@ -688,10 +688,10 @@ class Kernel
     }
 
     #<----ORDER PAGES BY ARRIVALS--->
-    public function orderByAccesses($pages)
+    public function orderByArrivals($pages)
     {
       function comparator($object1, $object2) {
-        return $object1->accesses > $object2->accesses;
+        return $object1->accesses > $object2->arrival;
       }
         usort($pages, 'comparator');
         return $pages;
