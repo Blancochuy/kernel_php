@@ -147,6 +147,8 @@ class Page
     $this->accesses = $accesses;
     $this->nur_referencia = $nur_referencia;
     $this->nur_modificacion = $nur_modificacion;
+    $this->cont_nur = 0;
+    $this->nur_priority = null;
   }
 }
 

@@ -64,6 +64,11 @@
     $_SESSION['pageOrder'] = $_POST['pageOrder'];
   }
 
+  if(isset($_POST['reset_bits']))
+  {
+    $_SESSION['kernel']->resetBits();
+  }
+
   //Al agregar tiempo o proceso se ejecutan
   if (isset($_POST['createProcess']) or isset($_POST['add']))
   {
@@ -532,10 +537,10 @@
                                         <?php if ($_SESSION['pageOrder'] == "REMPLAZO DE RELOJ") { echo "selected";}?>>REMPLAZO DE RELOJ</option>
                                     </select>
                                   </div>
-                                  </form>
                                   <br>
-                                  <a href="#" class="btn btn-info">Reset a bits NUR</a>
+                                  <input class="btn btn-info" name='reset_bits' type="submit" value='Reset a bits NUR'>
                                 </div>
+                                </form>
                                 <div class="card-footer text-muted">
 
                                 </div>
