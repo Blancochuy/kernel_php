@@ -430,7 +430,18 @@ class Kernel
           break;
       }
     }
+
     public function fifo_algorithm()
+    {
+
+    }
+
+    public function nur_algorithm()
+    {
+
+    }
+
+    public function lfu_algorithm()
     {
       $max_pages_loaded = 3;
       $loaded_pages = 0;
@@ -456,23 +467,28 @@ class Kernel
           $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
         }
 
+        #ORDENAR Y REEMPLAZAR
+        $pages_ordered = $this->orderByAccesses($this->cpu->running_process->pages);
+        $index_min_page = null;
+
+        for ($i=0; $i < count($pages_ordered); $i++) {
+          if ($pages_ordered[$i]->residence == 1) {
+           $index_min_page = $pages_ordered[$i]->id;
+           break;
+          }
+        }
+
         if (($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0) and ($loaded_pages >= $max_pages_loaded))
         {
           for ($i=0; $i < count($this->cpu->running_process->pages); $i++)
           {
             $page = $this->cpu->running_process->pages[$i];
             //var_dump($page);
-            $flag = true;
-            if ($page->residence == 1 and $page->last_access < $aux_min and ($loaded_pages >= $max_pages_loaded))
+
+            if ($page->residence == 1 and $page->id == $index_min_page)
             {
-              $aux_min = $page->last_access;
-              $page_min = $i;
-              if($flag)
-              {
-              $this->cpu->running_process->pages[$page_min]->residence = 0;
-              $flag = false;
+              $this->cpu->running_process->pages[$index_min_page]->residence = 0;
               break;
-              }
             }
 
           }
@@ -486,6 +502,7 @@ class Kernel
           }
         }
 
+
         if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages < $max_pages_loaded)
         {
           $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
@@ -498,27 +515,146 @@ class Kernel
           }
         }
       }
-
-    }
-
-    public function nur_algorithm()
-    {
-
-    }
-
-    public function lfu_algorithm()
-    {
-
     }
 
     public function lru_algorithm()
     {
+      $max_pages_loaded = 3;
+      $loaded_pages = 0;
+      $aux_min = 999999;
+      $page_min = null;
+      for ($l=0; $l < count($this->cpu->running_process->pages); $l++)
+      {
+        if ($this->cpu->running_process->pages[$l]->residence == 1)
+        {
+          $loaded_pages += 1;
+        }
+      }
 
+      if ($this->loaded_page == "Ninguna")
+      {
+        return "";
+      }
+      else
+      {
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 1)
+        {
+          $this->cpu->running_process->pages[$this->loaded_page-1]->accesses +=1;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+        }
+
+        #ORDENAR Y REEMPLAZAR
+        $pages_ordered = $this->orderByLastAccess($this->cpu->running_process->pages);
+        $index_min_page = null;
+
+        for ($i=0; $i < count($pages_ordered); $i++) {
+          if ($pages_ordered[$i]->residence == 1) {
+           $index_min_page = $pages_ordered[$i]->id;
+           break;
+          }
+        }
+
+        if (($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0) and ($loaded_pages >= $max_pages_loaded))
+        {
+          for ($i=0; $i < count($this->cpu->running_process->pages); $i++)
+          {
+            $page = $this->cpu->running_process->pages[$i];
+            //var_dump($page);
+
+            if ($page->residence == 1 and $page->id == $index_min_page)
+            {
+              $this->cpu->running_process->pages[$index_min_page]->residence = 0;
+              break;
+            }
+
+          }
+            $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
+            $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+            $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
+
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0)
+          {
+            $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
+          }
+        }
+
+
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages < $max_pages_loaded)
+        {
+          $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
+
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0)
+          {
+            $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
+          }
+        }
+      }
     }
 
     public function random_algorithm()
     {
+      $max_pages_loaded = 3;
+      $loaded_pages = 0;
+      $page_min = null;
 
+      for ($l=0; $l < count($this->cpu->running_process->pages); $l++)
+      {
+        if ($this->cpu->running_process->pages[$l]->residence == 1)
+        {
+          $loaded_pages += 1;
+        }
+      }
+
+      if ($this->loaded_page == "Ninguna")
+      {
+        return "";
+      }
+      else
+      {
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 1)
+        {
+          $this->cpu->running_process->pages[$this->loaded_page-1]->accesses +=1;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+        }
+
+        #ORDENAR Y REEMPLAZAR
+        $index_min_pages = [];
+        for ($i=0; $i < count($pages_ordered); $i++) {
+          if ($pages_ordered[$i]->residence == 1) {
+           array_push($index_min_page, $pages_ordered[$i]->id);
+          }
+        }
+
+        if (($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0) and ($loaded_pages >= $max_pages_loaded))
+        {
+            $random_page = array_rand($index_min_pages);
+            $this->cpu->running_process->pages[$random_page]->residence = 0;
+
+            $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
+            $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+            $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
+
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0)
+          {
+            $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
+          }
+        }
+
+
+        if ($this->cpu->running_process->pages[$this->loaded_page-1]->residence == 0 and $loaded_pages < $max_pages_loaded)
+        {
+          $this->cpu->running_process->pages[$this->loaded_page-1]->residence = 1;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->last_access = $this->cpu->actual_time;
+          $this->cpu->running_process->pages[$this->loaded_page-1]->accesses += 1;
+
+          if ($this->cpu->running_process->pages[$this->loaded_page-1]->arrival == 0)
+          {
+            $this->cpu->running_process->pages[$this->loaded_page-1]->arrival = $this->cpu->actual_time;
+          }
+        }
+      }
     }
 
     public function second_algorithm()
@@ -530,6 +666,38 @@ class Kernel
     {
 
     }
+
+    #<----ORDER PAGES BY LAST ACCESS--->
+    public function orderByLastAccess($pages)
+    {
+      function comparator($object1, $object2) {
+        return $object1->last_access > $object2->last_access;
+      }
+        usort($pages, 'comparator');
+        return $pages;
+    }
+
+    #<----ORDER PAGES BY ACCESSESS--->
+    public function orderByAccesses($pages)
+    {
+      function comparator($object1, $object2) {
+        return $object1->accesses > $object2->accesses;
+      }
+        usort($pages, 'comparator');
+        return $pages;
+    }
+
+    #<----ORDER PAGES BY ARRIVALS--->
+    public function orderByAccesses($pages)
+    {
+      function comparator($object1, $object2) {
+        return $object1->accesses > $object2->accesses;
+      }
+        usort($pages, 'comparator');
+        return $pages;
+    }
+
+
 
 }
 

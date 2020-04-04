@@ -77,8 +77,6 @@
     $_SESSION['kernel']->run_memory_pages();
   }
 
-
-
 ?>
 <html lang="en">
     <head>
@@ -148,10 +146,10 @@
                           ?>
                           <option value=
                           "<?php
-                            echo $i+1;
+                            echo $_SESSION['kernel']->cpu->running_process->pages[$i]->id+1;
                           ?>">
                             <?php
-                              echo $i+1;
+                              echo $_SESSION['kernel']->cpu->running_process->pages[$i]->id+1;
                              ?>
                           </option>
                         <?php
@@ -493,7 +491,7 @@
                             <tbody>
                               <?php for ($i=0; $i < count($_SESSION['kernel']->cpu->running_process->pages); $i++) {  ?>
                                 <tr>
-                                    <th scope="row"><?php echo $i+1 ?></th>
+                                    <th scope="row"><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->id+1 ?></th>
                                     <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->residence ?></td>
                                     <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->arrival ?></td>
                                     <td><?php echo $_SESSION['kernel']->cpu->running_process->pages[$i]->last_access ?></td>

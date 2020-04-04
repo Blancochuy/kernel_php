@@ -235,7 +235,7 @@ class Functions
       $page = new Page($residence, $arrival, $last_access, $accesses, $nur_referencia, $nur_modificacion);
       array_push($process_pages, $page);
     }
-    return $process_pages;
+    return $this->assignPageID($process_pages);
   }
 
   public function initializePages($num_paginas)
@@ -245,7 +245,16 @@ class Functions
       $page = new Page(0, 0 , 0 ,0 ,0 ,0);
       array_push($process_pages, $page);
     }
-    return $process_pages;
+
+    return $this->assignPageID($process_pages);
+  }
+
+  public function assignPageID($pages)
+  {
+    for ($i=0; $i < count($pages); $i++) {
+      $pages[$i]->id = $i;
+    }
+    return $pages;
   }
 
 }

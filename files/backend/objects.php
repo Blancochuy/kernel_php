@@ -140,6 +140,7 @@ class Page
 {
   function __construct($residence, $arrival, $last_access, $accesses, $nur_referencia, $nur_modificacion)
   {
+    $this->id = null;
     $this->residence = $residence;
     $this->arrival = $arrival;
     $this->last_access = $last_access;
